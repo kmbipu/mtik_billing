@@ -4,18 +4,30 @@ namespace App\Services;
 
 use App\Models\Role;
 use Session;
+use Exception;
 
 class RoleService
 {
+
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new Role();
+    }
 
     public static function find($id){
         return Role::find($id);
     }
 
-    public static function search($params=[], $str="", $is_paginate = false, $rows = 15){
-        $role = Role::where($params);
+    public static function getAll(){
+        return Role::get();
+    }
+
+    public function search($params=[], $str="", $is_paginate = false, $rows = 15){
+        $role = $this->model->where($params);
         if(!empty($str)){
-            $user = $role->where(function($query) use ($str) {
+            $role = $role->where(function($query) use ($str) {
                 $query->orWhere('name','like',$str.'%');
             });
         }
@@ -27,41 +39,38 @@ class RoleService
         return $roles;
     }
 
-    public static function insert($params){
+    public function insert($params){
         try{
-            $rm = new Role();
-            $rm->create($params);
+            $this->model->create($params);
             Session::flash('success','Successfully added.');
             return true;
         }
         catch (Exception $e){
-            Session::flash('error',$e->getMessage());
+            Session::flash('error', "Unable to add.");
             return false;
         }
     }
 
-    public static function update($condition, $params){
+    public function update($condition, $params){
         try{
-            $rm = new Role();
-            $rm->where($condition)->update($params);
+            $this->model->where($condition)->update($params);
             Session::flash('success','Successfully updated.');
             return true;
         }
         catch (Exception $e){
-            Session::flash('error',$e->getMessage());
+            Session::flash('error','Unable to update.');
             return false;
         }
     }
 
-    public static function delete($id){
+    public function delete($id){
         try{
-            $rm = new Role();
-            $rm->find($id)->delete();
+            $this->model->find($id)->delete();
             Session::flash('success','Successfully deleted.');
             return true;
         }
         catch (Exception $e){
-            Session::flash('error',$e->getMessage());
+            Session::flash('error', 'Unable to delete.');
             return false;
         }
     }

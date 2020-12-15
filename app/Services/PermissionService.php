@@ -7,18 +7,30 @@ use App\Models\PermissionRole;
 use App\Models\Role;
 use Session;
 use Route;
+use Exception;
 
 class PermissionService
 {
 
-    public static function search($role_id=0){
-        $permissions = Permission::get();
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new Permission();
+    }
+
+    public static function getAll(){
+        return Permission::get();
+    }
+
+    public function search($role_id=0){
+        $permissions = self::getAll();
         $permission_roles = PermissionRole::where('role_id', $role_id)->get();
         $roles = Role::get();
         return array('roles'=>$roles,'permissions'=>$permissions,'permission_roles'=>$permission_roles);
     }
 
-    public static function refreshReload(){  
+    public function refreshReload(){  
 
         foreach (Route::getRoutes()->getRoutes() as $key => $route)
         {
@@ -27,8 +39,8 @@ class PermissionService
                 //Nothing to do
             }
             else{
-                $permission = new Permission();      
-                $permission_check = $permission->where('name',$name)->first();
+                $permission = $this->model;     
+                $permission_check = $this->model->where('name',$name)->first();
                 if(!$permission_check){
                     $permission->name = $name;
                     $permission->save();
@@ -38,19 +50,19 @@ class PermissionService
     
     }
 
-    public static function deleteMultiple($ids){
+    public function deleteMultiple($ids){
         try{
-            Permission::whereIn('id',$ids)->delete();
+            $this->model->whereIn('id',$ids)->delete();
             Session::flash('success','Successfully deleted.');
             return true;
         }
         catch (Exception $e){
-            Session::flash('error',$e->getMessage());
+            Session::flash('error', 'Unable to delete.');
             return false;
         }       
     }
 
-    public static function assignRole($role_id, $permission_ids=[]){
+    public function assignRole($role_id, $permission_ids=[]){
         if($role_id==null || empty($role_id)){
             Session::flash('error', 'Please select a role first from top.');
             return false;
@@ -64,7 +76,7 @@ class PermissionService
             return true;
         }
         catch (Exception $e){
-            Session::flash('error',$e->getMessage());
+            Session::flash('error', 'Unable to assign role.');
             return false;
         }
 

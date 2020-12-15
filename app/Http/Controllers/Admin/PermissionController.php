@@ -9,14 +9,22 @@ use Route;
 
 class PermissionController extends Controller
 {
+
+    private $service;
+
+    public function __construct()
+    {
+        $this->service = new PermissionService();
+    }
+
     public function index(){
-        $result = PermissionService::search(request()->role_id);
+        $result = $this->service->search(request()->role_id);
          return view('admin.permission.index', $result);
     }
 
     public function refresh()
     {
-        PermissionService::refreshReload();
+        $this->service->refreshReload();
         return redirect('admin/permissions');
     }
 
@@ -26,9 +34,9 @@ class PermissionController extends Controller
         $role_id = $data['role_id'];
         $ids = $data['permissions'];
         if($action=='1')         
-            PermissionService::deleteMultiple($ids);
+            $this->service->deleteMultiple($ids);
         elseif($action=='2')
-            PermissionService::assignRole($role_id, $ids);
+            $this->service->assignRole($role_id, $ids);
         return back();
     }
 

@@ -10,21 +10,21 @@ use Session;
 class RoleController extends Controller
 {
 
-    private $model;
+    private $service;
 
     public function __construct()
     {
-        $this->model = new RoleService();
+        $this->service = new RoleService();
     }
 
     public function index(){
-        $roles = $this->model->search();
+        $roles = $this->service->search();
         return view('admin.role.index', array('roles'=>$roles));
     }
 
     public function add(Request $request){
         if($request->method()=='POST'){
-            $this->model->insert($request->all());
+            $this->service->insert($request->all());
             return back();
         }        
         return view('admin.role.add');
@@ -32,10 +32,10 @@ class RoleController extends Controller
 
     public function edit(Request $request, $id){
         if($request->method()=='POST'){
-            $this->model->update(['id'=>$id], $this->filter($request->all()));
+            $this->service->update(['id'=>$id], $this->filter($request->all()));
             return back();
         } 
-        $role = $this->model->find($id);
+        $role = $this->service->find($id);
         if($role)     
             return view('admin.role.edit', array('role'=>$role));
         else
@@ -43,7 +43,7 @@ class RoleController extends Controller
     }
 
     public function delete($id){
-        $this->model->delete($id);
+        $this->service->delete($id);
         return back();
     }
 

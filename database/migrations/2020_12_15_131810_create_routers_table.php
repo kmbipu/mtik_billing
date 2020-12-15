@@ -19,7 +19,7 @@ class CreateRoutersTable extends Migration
             $table->string('ip',30);
             $table->string('username',50);
             $table->string('password',50);
-            $table->string('details',255);
+            $table->string('details',255)->nullable();
             $table->timestamps();
         });
     }

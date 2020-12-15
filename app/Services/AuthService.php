@@ -3,6 +3,7 @@
 namespace App\Services;
 use Session;
 use Auth;
+use Exception;
 
 class AuthService
 {

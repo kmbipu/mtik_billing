@@ -15,7 +15,13 @@ class CreateBandwidthsTable extends Migration
     {
         Schema::create('bandwidths', function (Blueprint $table) {
             $table->id();
+            $table->string('name',100);
+            $table->integer('rate_down');
+            $table->string('rate_down_unit',4);
+            $table->integer('rate_up');
+            $table->string('rate_up_unit',4);
             $table->timestamps();
+   
         });
     }
 

@@ -44,5 +44,17 @@ Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/routers/edit/{id}', [App\Http\Controllers\Admin\RouterController::class, 'edit'])->name('role.edit');
     Route::post('/routers/delete/{id}', [App\Http\Controllers\Admin\RouterController::class, 'delete'])->name('role.delete');
     
+    //Pools
+    Route::get('/pools', [App\Http\Controllers\Admin\PoolController::class, 'index'])->name('role.view');
+    Route::match(['get', 'post'], '/pools/add', [App\Http\Controllers\Admin\PoolController::class, 'add'])->name('role.add');
+    Route::match(['get', 'post'], '/pools/edit/{id}', [App\Http\Controllers\Admin\PoolController::class, 'edit'])->name('role.edit');
+    Route::post('/pools/delete/{id}', [App\Http\Controllers\Admin\PoolController::class, 'delete'])->name('role.delete');
+    
+    //Bandwidths
+    Route::get('/bandwidths', [App\Http\Controllers\Admin\BandwidthController::class, 'index'])->name('role.view');
+    Route::match(['get', 'post'], '/bandwidths/add', [App\Http\Controllers\Admin\BandwidthController::class, 'add'])->name('role.add');
+    Route::match(['get', 'post'], '/bandwidths/edit/{id}', [App\Http\Controllers\Admin\BandwidthController::class, 'edit'])->name('role.edit');
+    Route::post('/bandwidths/delete/{id}', [App\Http\Controllers\Admin\BandwidthController::class, 'delete'])->name('role.delete');
+    
 
 });

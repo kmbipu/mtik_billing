@@ -61,7 +61,7 @@
                     <br>
                     <div class="form-group text-center">
                       <button type="submit" class="btn btn-primary pull-right mr-3">Update</button>
-                      <button type="reset" class="btn btn-default pull-right">Back</button>
+                      <a href="{{url('admin/users')}}" class="btn btn-default pull-right">Back</a>
                     </div>
                     
               </div>        

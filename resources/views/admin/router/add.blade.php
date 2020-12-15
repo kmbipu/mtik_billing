@@ -34,7 +34,7 @@
                     <br>
                     <div class="form-group text-center">
                       <button type="submit" class="btn btn-primary pull-right mr-3">Create</button>
-                      <button type="reset" class="btn btn-default pull-right">Reset</button>
+                      <a href="{{url('admin/routers')}}" class="btn btn-default pull-right">Back</a>
                     </div>
                     
               </div>        

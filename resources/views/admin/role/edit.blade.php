@@ -27,6 +27,8 @@
                       <input name="name" type="text" class="form-control" id="input_role_name" aria-describedby="emailHelp" placeholder="Enter a role name" value="{{ $role->name }}" required>
                     </div>
                     <button type="submit" class="btn btn-primary">Update</button> <a href="{{ url("/admin/roles") }}" class="btn btn-default">Back</a>
+                    <a href="{{url('admin/roles')}}" class="btn btn-default pull-right">Back</a>
+
                   </form>
             </div>         
             

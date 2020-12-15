@@ -7,15 +7,28 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Helper;
 use Session;
+use Exception;
 
 class UserService
 {
+
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new User();
+    }
+
     public static function find($id){
         return User::find($id);
     }
 
-    public static function search($params=[], $str="", $is_paginate = false, $rows = 15){
-        $user = User::where($params);
+    public static function getAll(){
+        return User::get();
+    }
+
+    public function search($params=[], $str="", $is_paginate = false, $rows = 15){
+        $user =  $this->model->where($params);
         if(!empty($str)){
             $user = $user->where(function($query) use ($str) {
                 $query->orWhere('name','like',$str.'%');
@@ -35,12 +48,12 @@ class UserService
             $params['password'] = Hash::make($params['password']);
             $params['secret'] = $params['password'];
             try{
-                User::create($params);
+                $this->model->create($params);
                 Session::flash('success','Successfully added.');
                 return true;
             }
             catch (\Exception $e){
-                Session::flash('error',$e->getMessage());
+                Session::flash('error', "Unable to add.");
                 return false;
             }
         }
@@ -55,12 +68,12 @@ class UserService
         $validator = $this->validator($params, true);
         if ($validator->passes()) {
             try{                
-                User::where($condition)->update($params);
+                $this->model->where($condition)->update($params);
                 Session::flash('success','Successfully updated.');
                 return true;
             }
             catch (\Exception $e){
-                Session::flash('error',$e->getMessage());
+                Session::flash('error','Unable to update.');
                 return false;
             }
         }
@@ -71,14 +84,14 @@ class UserService
         }
     }
 
-    public static function delete($id){
+    public function delete($id){
         try{
-            User::find($id)->delete();
+            $this->model->find($id)->delete();
             Session::flash('success','Successfully deleted.');
             return true;
         }
         catch (Exception $e){
-            Session::flash('error',$e->getMessage());
+            Session::flash('error', 'Unable to delete.');
             return false;
         }
     }

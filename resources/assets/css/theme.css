@@ -2048,6 +2048,7 @@ td{vertical-align: middle !important;}
 .table {
   color: #4e4b4b !important;
 }
+label{color: black !important;}
 
 @media only screen and (max-width: 424px) {
   .helpline-div {

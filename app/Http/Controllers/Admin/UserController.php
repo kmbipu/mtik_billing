@@ -9,37 +9,37 @@ use App\Services\RoleService;
 
 class UserController extends Controller
 {
-    private $model;
+    private $service;
 
     public function __construct()
     {
-        $this->model = new UserService();
+        $this->service = new UserService();
     }
 
     public function index(){
         $args = $this->filter();
         $query = request('query');
-        $users = UserService::search($args,$query,true);
-        $roles = RoleService::search();
+        $users = $this->service->search($args,$query,true);
+        $roles = RoleService::getAll();
         return view('admin.user.index', array('users'=>$users,'roles'=>$roles));
     }
 
     public function add(Request $request){
         if($request->method()=='POST'){
-            if($this->model->insert($request->all()))
+            if($this->service->insert($request->all()))
                 return back();            
         }
-        $roles = RoleService::search();     
+        $roles = RoleService::getAll();     
         return view('admin.user.add',array('roles'=>$roles));
     }
 
     public function edit(Request $request, $id){
         if($request->method()=='POST'){
-            $this->model->update(['id'=>$id], $this->filter($request->all()));
+            $this->service->update(['id'=>$id], $this->filter($request->all()));
             return back();
         } 
-        $user = UserService::find($id);
-        $roles = RoleService::search();
+        $user = $this->service->find($id);
+        $roles = RoleService::getAll();
         if($user)     
             return view('admin.user.edit', array('user'=>$user,'roles'=>$roles));
         else
@@ -48,7 +48,7 @@ class UserController extends Controller
 
 
     public function delete($id){
-        $this->model->delete($id);
+        $this->service->delete($id);
         return back();
     }
 }

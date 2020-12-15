@@ -8,21 +8,23 @@ use App\Services\RouterService;
 
 class RouterController extends Controller
 {
+    private $service;
+
     public function __construct()
     {
-        $this->model = new RouterService();
+        $this->service = new RouterService();
     }
 
     public function index(){
         $args = $this->filter();
         $query = request('query');
-        $routers = $this->model->search();
+        $routers = $this->service->search($args,$query,true);
         return view('admin.router.index', array('routers'=>$routers));
     }
 
     public function add(Request $request){
         if($request->method()=='POST'){
-            if($this->model->insert($request->all()))
+            if($this->service->insert($request->all()))
                 return back();            
         }    
         return view('admin.router.add');
@@ -30,10 +32,10 @@ class RouterController extends Controller
 
     public function edit(Request $request, $id){
         if($request->method()=='POST'){
-            $this->model->update(['id'=>$id], $this->filter($request->all()));
+            $this->service->update(['id'=>$id], $this->filter($request->all()));
             return back();
         } 
-        $router = $this->model->find($id);
+        $router = $this->service->find($id);
         if($router)     
             return view('admin.router.edit', array('router'=>$router));
         else
@@ -41,7 +43,7 @@ class RouterController extends Controller
     }
     
     public function delete($id){
-        $this->model->delete($id);
+        $this->service->delete($id);
         return back();
     }
 

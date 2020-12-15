@@ -6,17 +6,31 @@ use App\Models\Router;
 use Illuminate\Support\Facades\Validator;
 use App\Services\Helper;
 use Session;
+use Exception;
 
 class RouterService
 {
+
+
+    private $model;
+
+    public function __construct()
+    {
+        $this->model = new Router();
+    }
+
     public static function find($id){
         return Router::find($id);
     }
 
-    public static function search($params=[], $str="", $is_paginate = false, $rows = 15){
-        $router = Router::where($params);
+    public static function getAll(){
+        return Router::get();
+    }
+
+    public function search($params=[], $str="", $is_paginate = false, $rows = 15){
+        $router = $this->model->where($params);
         if(!empty($str)){
-            $user = $router->where(function($query) use ($str) {
+            $router = $router->where(function($query) use ($str) {
                 $query->orWhere('name','like',$str.'%');
             });
         }
@@ -32,12 +46,12 @@ class RouterService
         $validator = $this->validator($params);
         if ($validator->passes()) {
             try{
-                Router::create($params);
+                $this->model->create($params);
                 Session::flash('success','Successfully added.');
                 return true;
             }
             catch (\Exception $e){
-                Session::flash('error',$e->getMessage());
+                Session::flash('error', "Unable to add.");
                 return false;
             }
         }
@@ -52,12 +66,12 @@ class RouterService
         $validator = $this->validator($params, true);
         if ($validator->passes()) {
             try{                
-                Router::where($condition)->update($params);
+                $this->model->where($condition)->update($params);
                 Session::flash('success','Successfully updated.');
                 return true;
             }
             catch (\Exception $e){
-                Session::flash('error',$e->getMessage());
+                Session::flash('error','Unable to update.');
                 return false;
             }
         }
@@ -68,14 +82,14 @@ class RouterService
         }
     }
 
-    public static function delete($id){
+    public function delete($id){
         try{
-            Router::find($id)->delete();
+            $this->model->find($id)->delete();
             Session::flash('success','Successfully deleted.');
             return true;
         }
         catch (Exception $e){
-            Session::flash('error',$e->getMessage());
+            Session::flash('error', 'Unable to delete.');
             return false;
         }
     }
