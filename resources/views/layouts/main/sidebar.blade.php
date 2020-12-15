@@ -102,15 +102,15 @@
       </li>
 
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayment" aria-expanded="false" aria-controls="collapseBootstrap">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePlans" aria-expanded="false" aria-controls="collapseBootstrap">
           <i class="far fa-fw fa-window-maximize"></i>
           <span>Plans</span>
         </a>
-        <div id="collapsePayment" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar" style="">
+        <div id="collapsePlans" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar" style="">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Plans</h6>
-            <a class="collapse-item" href="buttons.html">View All</a>
-            <a class="collapse-item" href="alerts.html">Add New</a>
+            <a class="collapse-item" href="{{ url("admin/plans") }}">View All</a>
+            <a class="collapse-item" href="{{ url("admin/plans/add") }}">Add New</a>
           </div>
         </div>
       </li>

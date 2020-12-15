@@ -56,5 +56,11 @@ Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/bandwidths/edit/{id}', [App\Http\Controllers\Admin\BandwidthController::class, 'edit'])->name('role.edit');
     Route::post('/bandwidths/delete/{id}', [App\Http\Controllers\Admin\BandwidthController::class, 'delete'])->name('role.delete');
     
+    //Plans
+    Route::get('/plans', [App\Http\Controllers\Admin\PlanController::class, 'index'])->name('role.view');
+    Route::match(['get', 'post'], '/plans/add', [App\Http\Controllers\Admin\PlanController::class, 'add'])->name('role.add');
+    Route::match(['get', 'post'], '/plans/edit/{id}', [App\Http\Controllers\Admin\PlanController::class, 'edit'])->name('role.edit');
+    Route::post('/plans/delete/{id}', [App\Http\Controllers\Admin\PlanController::class, 'delete'])->name('role.delete');
+    
 
 });

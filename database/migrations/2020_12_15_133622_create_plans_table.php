@@ -15,7 +15,23 @@ class CreatePlansTable extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
+            $table->string('name',100);
+            $table->unsignedBigInteger('pool_id');
+            $table->unsignedBigInteger('bandwidth_id');
+            $table->integer('price');
+            $table->integer('discount')->default(0);
+            $table->integer('validity');
+            $table->string('validity_unit',10);
+            $table->integer('reseller_id')->default(0);
             $table->timestamps();
+            $table->foreign('pool_id')
+            ->references('id')
+            ->on('pools')
+            ->onDelete('cascade');
+            $table->foreign('bandwidth_id')
+            ->references('id')
+            ->on('bandwidths')
+            ->onDelete('cascade');
         });
     }
 
