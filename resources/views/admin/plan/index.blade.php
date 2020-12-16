@@ -23,6 +23,7 @@
                     <tr>
                     <th>ID</th>
                     <th>Name</th>
+                    <th>Router</th>
                     <th>Bandwidth</th>
                     <th>Price</th>
                     <th>Validity</th>
@@ -35,6 +36,7 @@
                     <tr>
                     <td>{{ $d->id }}</td>
                     <td>{{ $d->name }}</td> 
+                    <td>{{ $d->router->name }}</td> 
                     <td>{{ $d->bandwidth->name }}</td>
                     <td>{{ $d->price }}</td>
                     <td>{{ $d->validity.' '.$d->validity_unit }}</td>

@@ -51,6 +51,7 @@ class PlanService
                 return true;
             }
             catch (\Exception $e){
+                dd($e->getMessage());
                 Session::flash('error', "Unable to add.");
                 return false;
             }
@@ -97,10 +98,12 @@ class PlanService
     protected function validator(array $data){
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:100'],
-            'rate_down' => ['required', 'integer', 'max:11'],
-            'rate_down_unit' => ['required', 'string', 'max:5'],
-            'rate_up' => ['required', 'integer', 'max:11'],
-            'rate_up_unit' => ['required', 'string', 'max:5'],
+            'router_id' => ['required', 'integer'],
+            'pool_id' => ['required', 'integer'],
+            'bandwidth_id' => ['required', 'integer'],
+            'price' => ['required', 'integer'],
+            'validity' => ['required', 'integer'],
+            'validity_unit' => ['required', 'string', 'max:10'],
         ]);
     }
 

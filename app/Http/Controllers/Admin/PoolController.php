@@ -50,6 +50,11 @@ class PoolController extends Controller
         $this->service->delete($id);
         return back();
     }
+    
+    public function getByRouter($router_id) {
+        $pools = $this->service->search(['router_id'=>$router_id]);
+        return $pools;
+    }
 
 
 }

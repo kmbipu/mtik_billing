@@ -114,7 +114,7 @@ class PoolService
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:100'],
             'ip_range' => ['required', 'string', 'max:100'],
-            'router_id' => ['required', 'integer', 'max:11'],
+            'router_id' => ['required', 'integer'],
         ]);
     }
 

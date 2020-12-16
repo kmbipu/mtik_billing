@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         $role = array(
             'name'=>'Administrator',
-            'type'=>'admin',
+            'slug'=>'admin',
         );
         $user = array(
             'name'=>'Administrator',

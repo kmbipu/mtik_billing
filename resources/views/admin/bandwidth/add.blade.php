@@ -13,7 +13,7 @@
               <div class="card-body">                  
                     <div class="form-group">
                       <label>Name</label>
-                      <input name="name" type="text" class="form-control" placeholder="Enter pool name" required>
+                      <input name="name" type="text" class="form-control" placeholder="Enter bandwidth name" required>
                     </div>
                     <div class="form-group">                    
                       <div class="row">

@@ -3,8 +3,12 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Services\BandwidthService;
 use Illuminate\Http\Request;
 use App\Services\PlanService;
+use App\Services\PoolService;
+use App\Services\RouterService;
+use App\Services\UserService;
 
 class PlanController extends Controller
 {
@@ -26,8 +30,11 @@ class PlanController extends Controller
         if($request->method()=='POST'){
             if($this->service->insert($request->all()))
                 return back();            
-        } 
-        return view('admin.plan.add');
+        }
+        $routers = RouterService::getAll();
+        $bws = BandwidthService::getAll();        
+        $resellers = (new UserService())->getResellers();
+        return view('admin.plan.add',['routers'=>$routers,'bws'=>$bws,'resellers'=>$resellers]);
     }
 
     public function edit(Request $request, $id){
@@ -36,8 +43,12 @@ class PlanController extends Controller
             return back();
         } 
         $data = $this->service->find($id);
+        $routers = RouterService::getAll();
+        $pools = (new PoolService())->search(['router_id'=>$data->router_id]);
+        $bws = BandwidthService::getAll();
+        $resellers = (new UserService())->getResellers();  
         if($data)     
-            return view('admin.plan.edit', array('data'=>$data));
+            return view('admin.plan.edit',['data'=>$data,'routers'=>$routers,'pools'=>$pools,'bws'=>$bws,'resellers'=>$resellers]);
         else
             abort(404, "Not found");
     }

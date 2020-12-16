@@ -49,6 +49,8 @@ Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/pools/add', [App\Http\Controllers\Admin\PoolController::class, 'add'])->name('role.add');
     Route::match(['get', 'post'], '/pools/edit/{id}', [App\Http\Controllers\Admin\PoolController::class, 'edit'])->name('role.edit');
     Route::post('/pools/delete/{id}', [App\Http\Controllers\Admin\PoolController::class, 'delete'])->name('role.delete');
+    Route::get('/pools/get-by-router/{id}', [App\Http\Controllers\Admin\PoolController::class, 'getByRouter'])->name('role.delete');
+    
     
     //Bandwidths
     Route::get('/bandwidths', [App\Http\Controllers\Admin\BandwidthController::class, 'index'])->name('role.view');

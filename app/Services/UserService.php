@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Services\Helper;
 use Session;
 use Exception;
+use App\Models\Role;
 
 class UserService
 {
@@ -95,6 +96,16 @@ class UserService
             return false;
         }
     }
+    
+    public function getResellers(){
+        $role = Role::where('slug','reseller')->first();
+        if($role){
+            $role_id = $role->id;
+            $resellers = $this->model->where('role_id',$role_id)->get();
+            return $resellers;
+        }        
+        return [];
+    }
 
     protected function validator(array $data, $update=false){
         if($update==false){
@@ -102,7 +113,7 @@ class UserService
                 'name' => ['required', 'string', 'max:255'],
                 'username' => ['required', 'string', 'max:255'],
                 'password' => ['required', 'string', 'min:6', 'confirmed'],
-                'role_id' => ['required', 'integer', 'max:99'],
+                'role_id' => ['required', 'integer'],
                 'phone' => ['required', 'string', 'max:11'],
                 'address' => ['required', 'string', 'max:255'],
                 'nid' => ['required', 'string', 'max:20'],
@@ -111,7 +122,7 @@ class UserService
         else{
             return Validator::make($data, [
                 'name' => ['required', 'string', 'max:255'],
-                'role_id' => ['required', 'integer', 'max:99'],
+                'role_id' => ['required', 'integer'],
                 'phone' => ['required', 'string', 'max:11'],
                 'address' => ['required', 'string', 'max:255'],
                 'nid' => ['required', 'string', 'max:20'],
