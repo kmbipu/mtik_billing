@@ -30,15 +30,15 @@
         </div>
       </li>
       <li class="nav-item">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePPPoe" aria-expanded="false" aria-controls="collapseBootstrap">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePrepaids" aria-expanded="false" aria-controls="collapseBootstrap">
           <i class="far fa-fw fa-window-maximize"></i>
           <span>Prepaids</span>
         </a>
-        <div id="collapsePPPoe" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar" style="">
+        <div id="collapsePrepaids" class="collapse" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar" style="">
           <div class="bg-white py-2 collapse-inner rounded">
             <h6 class="collapse-header">Prepaids</h6>
-            <a class="collapse-item" href="alerts.html">Users</a>    
-            <a class="collapse-item" href="alerts.html">Recharge</a>        
+            <a class="collapse-item" href="{{ url("admin/prepaids") }}">Users</a>    
+            <a class="collapse-item" href="{{ url("admin/prepaids/recharge") }}">Recharge</a>        
           </div>
         </div>
       </li>

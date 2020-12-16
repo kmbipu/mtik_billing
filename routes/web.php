@@ -63,6 +63,15 @@ Route::prefix('admin')->group(function () {
     Route::match(['get', 'post'], '/plans/add', [App\Http\Controllers\Admin\PlanController::class, 'add'])->name('role.add');
     Route::match(['get', 'post'], '/plans/edit/{id}', [App\Http\Controllers\Admin\PlanController::class, 'edit'])->name('role.edit');
     Route::post('/plans/delete/{id}', [App\Http\Controllers\Admin\PlanController::class, 'delete'])->name('role.delete');
+    Route::get('/plans/get-by-router/{id}', [App\Http\Controllers\Admin\PlanController::class, 'getByRouter'])->name('role.delete');
+    
+    
+    //Prepaids
+    Route::get('/prepaids/', [App\Http\Controllers\Admin\PrepaidController::class, 'index'])->name('role.view');
+    Route::match(['get', 'post'], '/prepaids/recharge', [App\Http\Controllers\Admin\PrepaidController::class, 'recharge'])->name('role.add');
+    Route::match(['get', 'post'], '/prepaids/edit/{id}', [App\Http\Controllers\Admin\PrepaidController::class, 'edit'])->name('role.edit');
+    Route::post('/prepaids/delete/{id}', [App\Http\Controllers\Admin\PrepaidController::class, 'delete'])->name('role.delete');
+    
     
 
 });

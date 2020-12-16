@@ -46,8 +46,8 @@ class UserService
     public function insert($params){
         $validator = $this->validator($params);
         if ($validator->passes()) {
-            $params['password'] = Hash::make($params['password']);
             $params['secret'] = $params['password'];
+            $params['password'] = Hash::make($params['password']);            
             try{
                 $this->model->create($params);
                 Session::flash('success','Successfully added.');
@@ -105,6 +105,20 @@ class UserService
             return $resellers;
         }        
         return [];
+    }
+    
+    public function getAdminUsers(){
+        $role = Role::where('slug','customer')->first();
+        $role_id = -1;
+        if($role){$role_id= $role->id;}        
+        return $this->model->where(['reseller_id'=>0,'role_id'=>$role_id])->get();
+    }
+    
+    public function getResellerUsers($r_id){
+        $role = Role::where('slug','customer')->first();
+        $role_id = -1;
+        if($role){$role_id= $role->id;}
+        return $this->model->where(['reseller_id'=>$r_id,'role_id'=>$role_id])->get();
     }
 
     protected function validator(array $data, $update=false){

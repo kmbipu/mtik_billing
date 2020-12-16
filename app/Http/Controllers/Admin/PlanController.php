@@ -57,4 +57,9 @@ class PlanController extends Controller
         $this->service->delete($id);
         return back();
     }
+    
+    public function getByRouter($router_id) {
+        $plans = $this->service->search(['router_id'=>$router_id]);
+        return $plans;
+    }
 }
