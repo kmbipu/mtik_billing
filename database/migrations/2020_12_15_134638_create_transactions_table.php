@@ -15,7 +15,28 @@ class CreateTransactionsTable extends Migration
     {
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id');
+            $table->string('username',100);
+            $table->string('plan_name',100);
+            $table->integer('amount');
+            $table->date('start_dt');
+            $table->date('expire_dt');
+            $table->string('status',50); //pending/complete
+            $table->string('type',100); //recharge, payment(online), transfer
+            $table->string('p_method',100); //custom, bkash, cash
+            $table->string('p_trxid',100); //custom, bkash, cash
+            $table->string('p_notes',255)->nullable(); //
+            $table->integer('reseller_id')->default(0);
+            $table->unsignedBigInteger('created_by');            
             $table->timestamps();
+            $table->foreign('user_id')
+            ->references('id')
+            ->on('users')
+            ->onDelete('cascade');
+            $table->foreign('created_by')
+            ->references('id')
+            ->on('users')
+            ->onDelete('cascade');
         });
     }
 

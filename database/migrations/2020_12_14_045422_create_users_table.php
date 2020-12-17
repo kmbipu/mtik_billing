@@ -25,7 +25,7 @@ class CreateUsersTable extends Migration
             $table->string('phone',11);
             $table->string('address',255);
             $table->string('nid',18);
-            $table->integer('reseller_id')->default(0);
+            $table->integer('created_by');
             $table->rememberToken();
             $table->timestamps();
             $table->foreign('role_id')

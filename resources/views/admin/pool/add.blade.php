@@ -13,11 +13,11 @@
               <div class="card-body">                  
                     <div class="form-group">
                       <label>Name</label>
-                      <input name="name" type="text" class="form-control" placeholder="Enter pool name" required>
+                      <input value="{{request('name')}}" name="name" type="text" class="form-control" placeholder="Enter pool name" required>
                     </div>
                     <div class="form-group">
                       <label>IP Range</label>
-                      <input name="ip_range" type="text" class="form-control" placeholder="Enter IP range" required>
+                      <input value="{{request('ip_range')}}" name="ip_range" type="text" class="form-control" placeholder="Enter IP range" required>
                     </div>
 
                     <div class="form-group">
@@ -25,7 +25,7 @@
                         <select class="form-control"  name="router_id" required>
                         <option value="">Select Router</option>
                         @foreach($routers as $router)
-                        <option value="{{$router->id}}" >{{$router->name}}</option>
+                        <option value="{{$router->id}}" {{request('router_id')==$router->id?'selected':''}}>{{$router->name}}</option>
                         @endforeach
                         </select>
                     </div>

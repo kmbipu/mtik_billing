@@ -30,7 +30,7 @@ class PermissionService
         return array('roles'=>$roles,'permissions'=>$permissions,'permission_roles'=>$permission_roles);
     }
 
-    public function refreshReload(){  
+    public function refreshReload(){
 
         foreach (Route::getRoutes()->getRoutes() as $key => $route)
         {
@@ -39,14 +39,11 @@ class PermissionService
                 //Nothing to do
             }
             else{
-                $permission = $this->model;     
-                $permission_check = $this->model->where('name',$name)->first();
-                if(!$permission_check){
-                    $permission->name = $name;
-                    $permission->save();
-                }
+                $permission = new Permission();     
+                $permission->name = $name;
+                $permission->save();
             }
-        }  
+        } 
     
     }
 

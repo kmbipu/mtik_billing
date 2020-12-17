@@ -55,6 +55,7 @@ class PoolService
                 return true;
             }
             catch (\Exception $e){
+                Helper::log($e->getMessage());
                 Session::flash('error', "Unable to add.");
                 return false;
             }
@@ -79,6 +80,7 @@ class PoolService
                 return true;
             }
             catch (\Exception $e){
+                Helper::log($e->getMessage());
                 Session::flash('error','Unable to update.');
                 return false;
             }
@@ -105,6 +107,7 @@ class PoolService
         }
         catch (Exception $e){
             DB::rollBack();
+            Helper::log($e->getMessage());
             Session::flash('error', 'Unable to delete.');
             return false;
         }

@@ -1,5 +1,5 @@
 @extends('layouts.main') 
-@section('pageTitle', 'Edit PPPoe User : '.$data->id)
+@section('pageTitle', 'Edit Transaction : '.$data->id)
 
 @section('content')
 
@@ -16,16 +16,19 @@
 					<div class="table-responsive">
                         <table class="table table-td-sm table-bordered">  
                             <tbody>
-                            	<tr><td>Name</td><td>{{$data->user->name}}</td><tr>
-                            	<tr><td>Username</td><td>{{$data->user->username}}</td><tr>
-                            	<tr><td>Plan</td><td>{{$data->plan->name}}</td><tr>                            	
-                            	<tr><td>Expire Date</td><td><input class="form-control" name="expire_dt" value="{{$data->expire_dt}}"></td><tr>
+                            	<tr><td>ID</td><td>{{$data->id}}</td><tr>
+                            	<tr><td>Username</td><td>{{$data->username}}</td><tr>
+                            	<tr><td>Plan</td><td>{{$data->plan_name}}</td><tr>  
+                            	<tr><td>Amount</td><td>{{$data->amount}}</td><tr>  
+                            	<tr><td>Method</td><td>{{ucwords($data->p_method)}}</td><tr>  
+                            	<tr><td>Trx ID</td><td>{{$data->p_trxid}}</td><tr>                         	
+                            	<tr><td>Date</td><td>{{ $data->created_at->format('Y-m-d') }}</td><tr>
                             	<tr>
                             		<td>Status</td>
                             		<td>
                             		<select class="form-control" name="status" required>
-            							<option value="1" {{$data->status=='1'?'selected':''}}>Enable</option>
-            							<option value="0" {{$data->status=='0'?'selected':''}}>Disable</option>
+            							<option value="pending" {{$data->status=='pending'?'selected':''}}>Pending</option>
+            							<option value="complete" {{$data->status=='complete'?'selected':''}}>Complete</option>
             						</select>
                             		</td>
 								<tr>
@@ -37,7 +40,7 @@
 
 					<div class="form-group text-center">
 						<button type="submit" class="btn btn-primary pull-right mr-3">Update</button>
-						<a href="{{url('admin/prepaids')}}"
+						<a href="{{url('admin/transactions')}}"
 							class="btn btn-default pull-right">Back</a>
 					</div>
 

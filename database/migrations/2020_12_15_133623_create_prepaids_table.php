@@ -15,13 +15,12 @@ class CreatePrepaidsTable extends Migration
     {
         Schema::create('prepaids', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('user_id')->unique();
             $table->unsignedBigInteger('router_id');
             $table->unsignedBigInteger('plan_id');
             $table->date('start_dt');
             $table->date('expire_dt');
             $table->integer('status')->default(0);//0=inactive, 1=active
-            $table->integer('reseller_id')->default(0);//0=admin's user
             $table->timestamps();
             $table->foreign('user_id')
             ->references('id')

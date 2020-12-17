@@ -43,7 +43,7 @@ class PlanService
     }
 
     public function insert($params){
-        $validator = $this->validator($params);
+         $validator = $this->validator($params);
         if ($validator->passes()) {
             try{
                 $this->model->create($params);
@@ -51,7 +51,7 @@ class PlanService
                 return true;
             }
             catch (\Exception $e){
-                dd($e->getMessage());
+                Helper::log($e->getMessage());
                 Session::flash('error', "Unable to add.");
                 return false;
             }
@@ -72,6 +72,7 @@ class PlanService
                 return true;
             }
             catch (\Exception $e){
+                Helper::log($e->getMessage());
                 Session::flash('error','Unable to update.');
                 return false;
             }
@@ -90,6 +91,7 @@ class PlanService
             return true;
         }
         catch (Exception $e){
+            Helper::log($e->getMessage());
             Session::flash('error', 'Unable to delete.');
             return false;
         }

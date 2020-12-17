@@ -1,14 +1,14 @@
 @extends('layouts.main')
-@section('pageTitle', 'All Plans')
+@section('pageTitle', 'All Transactions')
 
 @section('headerRight')
 <form class="form-inline ml-auto ng-pristine ng-valid" method="get" action="">
 	<div class="md-form my-0 mr-2">
-        <select id="User Type" name="reseller_id" class="form-control form-control-sm">
+        <select name="created_by" class="form-control form-control-sm">
             <option value="">Show All</option>
-            <option value="0">Admin</option>
+            <option value="{{Auth::user()->id}}">My Trans.</option>
             @foreach($resellers as $r) 
-            	<option value="{{$r->id}}" {{request('reseller_id')==$r->id?'selected':''}}>{{$r->name}}</option>
+            	<option value="{{$r->id}}" {{request('created_by')==$r->id?'selected':''}}>{{$r->name}}</option>
             @endforeach
         </select>
     </div>
@@ -16,7 +16,6 @@
         <input name="query" class="form-control form-control-sm" type="text" placeholder="Search here" aria-label="Search" value="{{request('query')}}">
     </div>
     <button href="#" class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" type="submit"><i class="fa fa-search"></i></button>
-    <a class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" href="{{url('admin/plans/add')}}"><i class="fas fa-plus"></i> Add New</a>
 </form>
 @endsection
 
@@ -30,12 +29,11 @@
                 <thead class="thead-light">
                     <tr>
                     <th>ID</th>
-                    <th>Name</th>
-                    <th>Router</th>
-                    <th>Bandwidth</th>
-                    <th>Price</th>
-                    <th>Validity</th>
-                    <th>Reseller</th>
+                    <th>User</th>
+                    <th>Plan</th>
+                    <th>Amount</th>
+                    <th>Date</th>
+                    <th>Status</th>
                     <th>Action</th>
                     </tr>
                 </thead>
@@ -43,15 +41,19 @@
                     @foreach($data as $d)                   
                     <tr>
                     <td>{{ $d->id }}</td>
-                    <td>{{ $d->name }}</td> 
-                    <td>{{ $d->router->name }}</td> 
-                    <td>{{ $d->bandwidth->name }}</td>
-                    <td>{{ $d->price }}</td>
-                    <td>{{ $d->validity.' '.$d->validity_unit }}</td>
-                    <td>{{ $d->reseller_id }}</td> 
+                    <td>{{ $d->username }}</td> 
+                    <td>{{ $d->plan_name }}</td> 
+                    <td>{{ $d->amount }}</td>
+                    <td>{{ $d->created_at->format('Y-m-d') }}</td>                   
+                    @if($d->status=='complete')
+                    <td><span class="badge badge-success">{{$d->status}}</span></td> 
+                    @endif
+                    @if($d->status=='pending')
+                    <td><span class="badge badge-danger">{{$d->status}}</span></td> 
+                    @endif                    
                     <td>
-                        <a href="{{ url("/admin/plans/edit").'/'.$d->id }}" class="btn btn-sm btn-warning">Edit</a> 
-                        <a d_id="{{$d->id}}" d_action="{{url('/admin/plans/delete/'.$d->id)}}" href="#" class="btn btn-sm btn-danger delete-action-btn">Delete</a>
+                        <a href="{{ url("/admin/transactions/edit").'/'.$d->id }}" class="btn btn-sm btn-warning">Edit</a> 
+                        <a d_id="{{$d->id}}" d_action="{{url('/admin/transactions/delete/'.$d->id)}}" href="#" class="btn btn-sm btn-danger delete-action-btn">Delete</a>
                     </td>
                     </tr>
                     @endforeach

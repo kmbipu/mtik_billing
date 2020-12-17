@@ -46,18 +46,20 @@ class RoleService
             return true;
         }
         catch (Exception $e){
+            Helper::log($e->getMessage());
             Session::flash('error', "Unable to add.");
             return false;
         }
     }
 
-    public function update($condition, $params){
+    public function update($condition, $params){        
         try{
             $this->model->where($condition)->update($params);
             Session::flash('success','Successfully updated.');
             return true;
         }
         catch (Exception $e){
+            Helper::log($e->getMessage());
             Session::flash('error','Unable to update.');
             return false;
         }
@@ -70,6 +72,7 @@ class RoleService
             return true;
         }
         catch (Exception $e){
+            Helper::log($e->getMessage());
             Session::flash('error', 'Unable to delete.');
             return false;
         }

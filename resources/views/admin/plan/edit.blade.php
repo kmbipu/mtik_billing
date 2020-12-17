@@ -46,7 +46,7 @@
 					<div class="form-group">
 						<label for="exampleFormControlSelect1">Admin/Reseller</label> 
 						<select	class="form-control" name="reseller_id">
-							<option value="">Admin</option> 
+							<option value="0">Admin</option> 
 							@foreach($resellers as $reseller)
 							<option value="{{$reseller->id}}" {{$reseller->id==$data->reseller_id?'selected':''}}>{{$reseller->id}}-{{$reseller->name}}</option>
 							@endforeach

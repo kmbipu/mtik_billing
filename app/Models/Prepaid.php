@@ -15,6 +15,7 @@ class Prepaid extends Model
         'start_dt',
         'expire_dt',
         'validity',
+        'status'
     ];
     
     public function user()

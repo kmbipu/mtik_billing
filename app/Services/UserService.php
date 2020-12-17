@@ -9,6 +9,7 @@ use App\Services\Helper;
 use Session;
 use Exception;
 use App\Models\Role;
+use Auth;
 
 class UserService
 {
@@ -27,12 +28,21 @@ class UserService
     public static function getAll(){
         return User::get();
     }
+    
+    public static function getOwnCustomers(){
+        $role = Role::where('slug','customer')->first();
+        $role_id = -1;
+        if($role){$role_id= $role->id;}
+        return User::where(['created_by'=>Auth::user()->id,'role_id'=>$role_id])->get();
+    }
 
     public function search($params=[], $str="", $is_paginate = false, $rows = 15){
         $user =  $this->model->where($params);
         if(!empty($str)){
             $user = $user->where(function($query) use ($str) {
-                $query->orWhere('name','like',$str.'%');
+                $query->orWhere('name','like',$str.'%')
+                ->orWhere('phone','like',$str.'%')
+                ->orWhere('username','like',$str.'%');;
             });
         }
         if($is_paginate)
@@ -49,11 +59,13 @@ class UserService
             $params['secret'] = $params['password'];
             $params['password'] = Hash::make($params['password']);            
             try{
+                $params['created_by'] = Auth::user()->id;
                 $this->model->create($params);
                 Session::flash('success','Successfully added.');
                 return true;
             }
             catch (\Exception $e){
+                Helper::log($e->getMessage());
                 Session::flash('error', "Unable to add.");
                 return false;
             }
@@ -74,6 +86,7 @@ class UserService
                 return true;
             }
             catch (\Exception $e){
+                Helper::log($e->getMessage());
                 Session::flash('error','Unable to update.');
                 return false;
             }
@@ -92,6 +105,7 @@ class UserService
             return true;
         }
         catch (Exception $e){
+            Helper::log($e->getMessage());
             Session::flash('error', 'Unable to delete.');
             return false;
         }
@@ -105,14 +119,8 @@ class UserService
             return $resellers;
         }        
         return [];
-    }
-    
-    public function getAdminUsers(){
-        $role = Role::where('slug','customer')->first();
-        $role_id = -1;
-        if($role){$role_id= $role->id;}        
-        return $this->model->where(['reseller_id'=>0,'role_id'=>$role_id])->get();
-    }
+    }    
+
     
     public function getResellerUsers($r_id){
         $role = Role::where('slug','customer')->first();

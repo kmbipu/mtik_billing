@@ -14,7 +14,7 @@
 						<tr>
 							<th>ID</th>
 							<th>Name</th>
-							<th>Slug</th>
+							<th>Type</th>
 							<th>Action</th>
 						</tr>
 					</thead>
@@ -24,7 +24,7 @@
 							<td>{{ $role->id }}</td>
 							<td>{{ $role->name }}</td>
 							<td>{{ $role->slug }}</td>
-							<td><a href="{{ url(" /admin/roles/edit").'/'.$role->id }}"
+							<td><a href="{{url("admin/roles/edit").'/'.$role->id }}"
 									class="btn btn-sm btn-warning">Edit</a> <a d_id="{{$role->id}}"
 								d_action="{{url('/admin/roles/delete/'.$role->id)}}" href="#"
 								class="btn btn-sm btn-danger delete-action-btn">Delete</a></td>

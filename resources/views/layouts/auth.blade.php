@@ -28,7 +28,7 @@
             <div class="row">
               <div class="col-lg-12">  
                 <div class="login-form">              
-                  @yield('content');
+                  @yield('content')
                   @include('flash')
                 </div>
               </div>

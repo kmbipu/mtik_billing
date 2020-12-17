@@ -23,12 +23,13 @@ class PlanController extends Controller
         $args = $this->filter();
         $query = request('query');
         $data = $this->service->search($args, $query);
-        return view('admin.plan.index', array('data'=>$data));
+        $resellers = (new UserService)->getResellers();
+        return view('admin.plan.index', array('data'=>$data,'resellers'=>$resellers));
     }
 
     public function add(Request $request){
         if($request->method()=='POST'){
-            if($this->service->insert($request->all()))
+            if($this->service->insert($this->filter()))
                 return back();            
         }
         $routers = RouterService::getAll();
@@ -58,8 +59,8 @@ class PlanController extends Controller
         return back();
     }
     
-    public function getByRouter($router_id) {
-        $plans = $this->service->search(['router_id'=>$router_id]);
+    public function getByRouter($router_id) {        
+        $plans = $this->service->search(['router_id'=>$router_id,'reseller_id'=>null]);
         return $plans;
     }
 }

@@ -17,8 +17,13 @@
 						<input name="name"	type="text" class="form-control" placeholder="Enter a role name" required>
 					</div>
 					<div class="form-group">
-						<label for="input_role_name">Slug</label> 
-						<input name="slug" type="text" class="form-control" placeholder="Enter slug name" required>
+						<label for="exampleFormControlSelect1">Role Type</label>
+                        <select class="form-control"  name="slug" required>
+                        <option value="">Select Type</option>
+                        <option value="admin">Admin</option>
+                        <option value="reseller">Reseller</option>
+                        <option value="customer">Customer</option>
+                        </select>					
 					</div>
 					<button type="submit" class="btn btn-primary">Create</button>
 					<a href="{{url('admin/roles')}}" class="btn btn-default pull-right">Back</a>

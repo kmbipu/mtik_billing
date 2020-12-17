@@ -17,6 +17,7 @@ class Plan extends Model
         'price',
         'validity',
         'validity_unit',
+        'reseller_id'
     ];
 
     public function bandwidth()

@@ -1,11 +1,10 @@
 @extends('layouts.main') 
-@section('pageTitle', 'Recharge Review')
+@section('pageTitle', 'Renew Review')
 
 @section('content')
 
 <form method="post">
 @csrf
-	<input type="hidden" name="action" value="recharge">
 	<input type="hidden" name="prepaid[user_id]" value="{{$data->user_id}}">
 	<input type="hidden" name="prepaid[router_id]" value="{{$data->router_id}}">
 	<input type="hidden" name="prepaid[plan_id]" value="{{$data->plan_id}}">
@@ -76,8 +75,8 @@
 				
 					<br>
 					<div class="form-group text-center">
-						<button type="submit" class="btn btn-primary pull-right mr-3">Confirm Recharge</button>
-						<a href="{{url('admin/prepaids/recharge')}}"
+						<button type="submit" class="btn btn-primary pull-right mr-3">Confirm Renew</button>
+						<a href="{{url('admin/prepaids')}}"
 							class="btn btn-default pull-right">Back</a>
 					</div>
 				

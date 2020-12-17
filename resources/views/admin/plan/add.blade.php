@@ -11,16 +11,16 @@
 
 				<div class="card-body">
 					<div class="form-group">
-						<label>Plan Name</label> <input name="name" type="text"
-							class="form-control" placeholder="Enter plan name" required>
+						<label>Plan Name</label> 
+						<input value="{{request('name')}}" name="name" type="text" class="form-control" placeholder="Enter plan name" required>
 					</div>
 
 					<div class="form-group">
 						<label for="exampleFormControlSelect1">Router</label> 
 						<select id="select-router-for-pools" class="form-control" name="router_id" required>
-							<option value="">Select Router</option> @foreach($routers as
-							$router)
-							<option value="{{$router->id}}">{{$router->name}}</option>
+							<option value="">Select Router</option>
+							@foreach($routers as $router)
+							<option value="{{$router->id}}" {{request('router_id')==$router->id?'selected':''}}>{{$router->name}}</option>
 							@endforeach
 						</select>
 					</div>
@@ -35,16 +35,16 @@
 						<label for="exampleFormControlSelect1">Bandwidth</label> <select
 							class="form-control" name="bandwidth_id" required>
 							<option value="">Select Bandwidth</option> @foreach($bws as $bw)
-							<option value="{{$bw->id}}">{{$bw->name}}</option> @endforeach
+							<option value="{{$bw->id}}" {{request('bandwidth_id')==$bw->id?'selected':''}}>{{$bw->name}}</option> @endforeach
 						</select>
 					</div>
 					
 					<div class="form-group">
 						<label for="exampleFormControlSelect1">Admin/Reseller</label> 
 						<select	class="form-control" name="reseller_id">
-							<option value="">Admin</option> 
+							<option value="">For Admin</option> 
 							@foreach($resellers as $reseller)
-							<option value="{{$reseller->id}}">{{$reseller->id}}-{{$reseller->name}}</option>
+							<option value="{{$reseller->id}}" {{request('reseller_id')==$reseller->id?'selected':''}}>{{$reseller->id}}-{{$reseller->name}}</option>
 							@endforeach
 						</select>
 					</div>
@@ -59,26 +59,26 @@
 				<div class="card-body">					
 					
 					<div class="form-group">
-						<label>Price</label> <input name="price" type="number"
-							class="form-control" placeholder="Enter price" required>
+						<label>Price</label> 
+						<input value="{{request('price')}}" name="price" type="number" class="form-control" placeholder="Enter price" required>
 					</div>
 					
 					<div class="form-group">
-						<label>Discount</label> <input name="discount" type="number"
-							class="form-control" placeholder="Enter discount(optional)">
+						<label>Discount</label> 
+						<input value="{{request('discount')}}" name="discount" type="number" class="form-control" placeholder="Enter discount(optional)">
 					</div>
 					
 					<div class="form-group">
 						<div class="row">
 							<div class="col-sm-8">
-    							<label>Validity</label> <input name="validity" type="number"
-    							class="form-control" placeholder="Enter validity" required>
+    							<label>Validity</label> 
+    							<input value="{{request('validity')}}" name="validity" type="number" class="form-control" placeholder="Enter validity" required>
 							</div>
 							<div class="col-sm-4">
 								<label>Unit</label> 
 								<select	class="form-control" name="validity_unit" required>
-									<option value="days">Days</option>
-									<option value="month">Month</option>
+									<option value="days" {{request('validity_unit'=='days'?'selected':'')}}>Days</option>
+									<option value="month" {{request('validity_unit'=='month'?'selected':'')}}>Month</option>
 								</select>
 							</div>
 						</div>

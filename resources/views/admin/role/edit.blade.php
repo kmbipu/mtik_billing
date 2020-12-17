@@ -19,13 +19,18 @@
 							value="{{ $role->name }}" required>
 					</div>
 					<div class="form-group">
-						<label for="input_role_name">Name</label> <input name="name"
-							type="text" class="form-control" placeholder="Enter a slug"
-							value="{{ $role->slug }}" required>
+							
+						<label for="exampleFormControlSelect1">Role Type</label>
+                        <select class="form-control"  name="slug" required>
+                        <option value="">Select Type</option>
+                        <option value="admin" {{ $role->slug=='admin'?'selected':'' }}>Admin</option>
+                        <option value="reseller" {{ $role->slug=='reseller'?'selected':'' }}>Reseller</option>
+                        <option value="customer" {{ $role->slug=='customer'?'selected':'' }}>Customer</option>
+                        </select>
 					</div>
 					
 					<button type="submit" class="btn btn-primary">Update</button>
-					<a href="{{ url(" /admin/roles") }}" class="btn btn-default">Back</a>
+					<a href="{{url("admin/roles") }}" class="btn btn-default">Back</a>
 				</form>
 			</div>
 

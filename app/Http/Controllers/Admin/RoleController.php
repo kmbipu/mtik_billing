@@ -24,9 +24,10 @@ class RoleController extends Controller
 
     public function add(Request $request){
         if($request->method()=='POST'){
-            $this->service->insert($request->all());
+            $this->service->insert($this->filter($request->all));
             return back();
-        }        
+        }
+        
         return view('admin.role.add');
     }
 
