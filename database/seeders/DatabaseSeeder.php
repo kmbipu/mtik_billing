@@ -19,14 +19,15 @@ class DatabaseSeeder extends Seeder
             'slug'=>'admin',
         );
         $user = array(
-            'name'=>'Administrator',
+            'name'=>'System Admin',
             'username'=>'admin',
             'password'=>Hash::make('password'),
             'role_id'=>1,
             'secret'=>'password',
             'phone'=>'12345678901',
             'address'=>'Bhuyanpur',
-            'nid'=>'789456123'
+            'nid'=>'789456123',
+            'created_by'=>0
         );
         \App\Models\Role::create($role);
 
