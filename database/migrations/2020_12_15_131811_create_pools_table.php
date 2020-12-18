@@ -16,7 +16,7 @@ class CreatePoolsTable extends Migration
         Schema::create('pools', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('router_id');
-            $table->string('name',100);
+            $table->string('name',100)->unique();
             $table->string('ip_range',100);
             $table->timestamps();
             $table->foreign('router_id')

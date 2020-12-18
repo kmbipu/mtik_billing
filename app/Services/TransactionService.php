@@ -46,7 +46,7 @@ class TransactionService
         return $records;
     }
 
-    public function insert($params){
+    public function insert($params, $call=false){
         $validator = $this->validator($params);
         if ($validator->passes()) {           
             try{
@@ -56,8 +56,14 @@ class TransactionService
             }
             catch (\Exception $e){
                 Helper::log($e->getMessage());
-                Session::flash('error', "Unable to create transaction.");
-                return false;
+                $error = "Unable to create transaction.";
+                if($call){
+                    throw new Exception('$error');
+                }
+                else{
+                    Session::flash('error', $error);
+                    return false;
+                } 
             }
         }
         else{

@@ -15,7 +15,7 @@ class CreatePlansTable extends Migration
     {
         Schema::create('plans', function (Blueprint $table) {
             $table->id();
-            $table->string('name',100);
+            $table->string('name',100)->unique();
             $table->unsignedBigInteger('router_id');
             $table->unsignedBigInteger('pool_id');
             $table->unsignedBigInteger('bandwidth_id');

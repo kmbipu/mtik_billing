@@ -99,7 +99,7 @@ class PlanService
 
     protected function validator(array $data){
         return Validator::make($data, [
-            'name' => ['required', 'string', 'max:100'],
+            'name' => ['required', 'string', 'max:100', 'unique:plans'],
             'router_id' => ['required', 'integer'],
             'pool_id' => ['required', 'integer'],
             'bandwidth_id' => ['required', 'integer'],

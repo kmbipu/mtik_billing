@@ -13,7 +13,7 @@
               <div class="card-body">                  
                     <div class="form-group">
                       <label>Name</label>
-                      <input value="{{$data->name}}" name="name" type="text" class="form-control" placeholder="Enter router name" required>
+                      <input value="{{$data->name}}" name="name" type="text" class="form-control" placeholder="Enter router name" readonly>
                     </div>
                     <div class="form-group">
                       <label>IP Range</label>

@@ -46,15 +46,18 @@ class PoolService
         $validator = $this->validator($params);
         if ($validator->passes()) {
             try{
-
+                DB::beginTransaction();
                 $p2s = new Pear2Service($params['router_id']);
                 $p2s->addPool($params['name'],$params['ip_range']);
 
                 $this->model->create($params);
+                
+                DB::commit();
                 Session::flash('success','Successfully added.');
                 return true;
             }
             catch (\Exception $e){
+                DB::rollBack();
                 Helper::log($e->getMessage());
                 Session::flash('error', "Unable to add.");
                 return false;
@@ -71,15 +74,18 @@ class PoolService
         $validator = $this->validator($params, true);
         if ($validator->passes()) {
             try{    
-                
+                DB::beginTransaction();
                 $p2s = new Pear2Service($params['router_id']);
                 $p2s->editPool($params['name'],$params['ip_range']);
                 
                 $this->model->where($condition)->update($params);
+                
+                DB::commit();
                 Session::flash('success','Successfully updated.');
                 return true;
             }
             catch (\Exception $e){
+                DB::rollBack();
                 Helper::log($e->getMessage());
                 Session::flash('error','Unable to update.');
                 return false;
@@ -113,12 +119,21 @@ class PoolService
         }
     }
 
-    protected function validator(array $data){
-        return Validator::make($data, [
-            'name' => ['required', 'string', 'max:100'],
-            'ip_range' => ['required', 'string', 'max:100'],
-            'router_id' => ['required', 'integer'],
-        ]);
+    protected function validator(array $data, $update=false){
+        if($update==false){
+            return Validator::make($data, [
+                'name' => ['required', 'string', 'max:100', 'unique:pools'],
+                'ip_range' => ['required', 'string', 'max:100'],
+                'router_id' => ['required', 'integer'],
+            ]);
+        }
+        else{
+            return Validator::make($data, [
+                'name' => ['required', 'string', 'max:100'],
+                'ip_range' => ['required', 'string', 'max:100'],
+                'router_id' => ['required', 'integer'],
+            ]);
+        }
     }
 
 }

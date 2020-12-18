@@ -21,9 +21,9 @@ class DatabaseSeeder extends Seeder
         $user = array(
             'name'=>'System Admin',
             'username'=>'admin',
-            'password'=>Hash::make('password'),
+            'password'=>Hash::make('123456'),
             'role_id'=>1,
-            'secret'=>'password',
+            'secret'=>'123456',
             'phone'=>'12345678901',
             'address'=>'Bhuyanpur',
             'nid'=>'789456123',

@@ -11,7 +11,7 @@
           <!--<img src="{{ asset('resources/assets/img/logo/logo.png') }}">-->
           <i class="fa fa-wifi fa-lg"></i>
         </div>
-        <div class="sidebar-brand-text mx-3">SHORIF ISP</div>
+        <div class="sidebar-brand-text mx-3">SCABLE.NET</div>
       </a>
       <hr class="sidebar-divider my-0">
       <li class="nav-item active">

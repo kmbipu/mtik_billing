@@ -7,6 +7,7 @@ use App\Services\Helper;
 use Session;
 use Exception;
 use Auth;
+use Illuminate\Support\Facades\DB;
 
 class PrepaidService
 {
@@ -47,28 +48,42 @@ class PrepaidService
         return $records;
     }
 
-    public function insert($params)
+    public function insert($params, $call=false)
     {
         $validator = $this->validator($params);
         if ($validator->passes()) {
             try {
-                $this->model->create($params);                
+                $this->model->create($params); 
+                $p2s = new Pear2Service($params['router_id']);
+                $p2s->addPPPoeUser($params['username'], $params['password'], $params['plan_name']);
+                
                 return true;
             } catch (\Exception $e) {
                 Helper::log($e->getMessage());
-                $this->error = 'Unable to insert prepaid data.';
-                return false;
+                if($call){
+                    throw new Exception('$error');
+                }
+                else{
+                    Session::flash('error', $error);
+                    return false;
+                }
             }
-        } else {
-            $this->error = Helper::errorToString($validator->errors()->all());
-            return false;
+        } else {            
+            $error = Helper::errorToString($validator->errors()->all());
+            if($call){
+                throw new Exception('$error');
+            }                
+            else{
+                Session::flash('error', $error);
+                return false;
+            }            
         }
     }
 
     public function updateStatusExpire($condition, $params)
     {
         try {
-            $this->model->where($condition)->update($params);   
+            $this->model->where($condition)->update($params); 
             Session::flash('success', 'Successfully updated.');
             return true;
         } catch (\Exception $e) {
@@ -79,15 +94,25 @@ class PrepaidService
         
     }
     
-    public function update($condition, $params)
+    public function update($condition, $params, $call=false)
     {
         try {
             $this->model->where($condition)->update($params);
+            $p2s = new Pear2Service($params['router_id']);
+            $p2s->deletePPPoeUser($params['username']);
+            $p2s->addPPPoeUser($params['username'], $params['password'], $params['plan_name']);
+            
             return true;
         } catch (\Exception $e) {
             Helper::log($e->getMessage());
-            $this->error = 'Unable to update prepaid data.';
-            return false;
+            $error = 'Unable to update prepaid data.';
+            if($call){
+                throw new Exception('$error');
+            }
+            else{
+                Session::flash('error', $error);
+                return false;
+            } 
         }
         
     }
@@ -109,10 +134,20 @@ class PrepaidService
     public function renew($condition, $params)
     {        
         try {
+            DB::beginTransaction();
             
-            $this->update($condition, $params['prepaid']);
             
+            $user_id = $params['prepaid']['user_id'];
+            $prepaid = $this->model->where(['user_id'=>$user_id])->first();
             $plan = PlanService::find($params['prepaid']['plan_id']);
+            $user = UserService::find($user_id);
+            
+            $params['prepaid']['username'] = $user->username;
+            $params['prepaid']['password'] = $user->secret;
+            $params['prepaid']['plan_name'] = $plan->name;
+            
+            
+            $this->update($condition, $params['prepaid'], true);
             
             $trans = array(
                 'user_id' => $params['prepaid']['user_id'],
@@ -128,11 +163,12 @@ class PrepaidService
             );
 
             $ts = new TransactionService();
-            $ts->insert($trans);
-            
+            $ts->insert($trans, true);
+            DB::commit();
             Session::flash('success', 'Successfully renewed.');
             return true;
         } catch (Exception $e) {
+            DB::rollBack();
             Helper::log($e->getMessage());
             Session::flash('error', 'Unable to renew now.');
             return false;
@@ -143,13 +179,22 @@ class PrepaidService
     public function recharge($params)
     {
          try {
-            $prepaid = $this->model->where(['user_id'=>$params['prepaid']['user_id']])->first();
-            if ($prepaid)
-                $this->update(['id' => $prepaid->id], $params['prepaid']);
-            else
-                $this->insert($params['prepaid']);
-
+            DB::beginTransaction();
+            $user_id = $params['prepaid']['user_id'];
+            $prepaid = $this->model->where(['user_id'=>$user_id])->first();
             $plan = PlanService::find($params['prepaid']['plan_id']);
+            $user = UserService::find($user_id);
+            
+            $params['prepaid']['username'] = $user->username;
+            $params['prepaid']['password'] = $user->secret;
+            $params['prepaid']['plan_name'] = $plan->name;
+            
+            if ($prepaid)
+                $this->update(['id' => $prepaid->id], $params['prepaid'], true);
+            else
+                $this->insert($params['prepaid'],true);
+
+            
             $trans = array(
                 'user_id' => $params['prepaid']['user_id'],
                 'username' => UserService::find($params['prepaid']['user_id'])->username,
@@ -163,11 +208,14 @@ class PrepaidService
                 'p_trxid' => $params['trans']['trxid'],
             );
             $ts = new TransactionService();
-            $ts->insert($trans);
+            $ts->insert($trans,true);
+            
+            DB::commit();
             Session::flash('success', 'Successfully recharged.');
             return true;
             
         } catch (Exception $e) {
+            DB::rollBack();
             Helper::log($e->getMessage());
             Session::flash('error', 'Unable to recharge now.');
             return false;
