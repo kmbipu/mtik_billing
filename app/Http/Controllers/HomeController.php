@@ -18,6 +18,6 @@ class HomeController extends Controller
 
     public function customerHome()
     {
-        return 'Customer home';
+        return 'Customer home'; 
     }
 }
