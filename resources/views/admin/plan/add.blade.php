@@ -1,4 +1,5 @@
-@extends('layouts.main') @section('pageTitle', 'Add Plan')
+@extends('layouts.main') 
+@section('pageTitle', 'Add Plan')
 
 @section('content')
 

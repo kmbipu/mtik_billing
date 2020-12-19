@@ -12,14 +12,16 @@ use Illuminate\Support\Facades\Route;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
+Route::get('/', [App\Http\Controllers\PageController::class, 'home']);
 Route::match(['get', 'post'], '/login', [App\Http\Controllers\AuthController::class, 'login'])->name('login');
 Route::get('/logout', [App\Http\Controllers\AuthController::class, 'logout']);
-
+Route::get('/cron', [App\Http\Controllers\CronController::class, 'index']);
 
 Route::prefix('admin')->middleware(['auth'])->group(function () {
 
     //Dashboard
-    Route::get('/', [App\Http\Controllers\HomeController::class, 'adminHome'])->name('admin.home.view');
+    Route::get('/', [App\Http\Controllers\PageController::class, 'adminHome'])->name('admin.home.view');
 
     //Roles
     Route::get('/roles', [App\Http\Controllers\Admin\RoleController::class, 'index'])->name('admin.roles.view');

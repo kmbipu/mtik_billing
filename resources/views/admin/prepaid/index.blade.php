@@ -50,7 +50,7 @@
                     <td style="color:{{$d->status?'green':'red'}}">{{$d->username }}</td> 
                     <td>{{ \app\Services\PlanService::find($d->plan_id)->name }}</td>   
                     <td>{{ $d->start_dt }}</td>                
-                    <td>{{ $d->expire_dt }}</td>
+                    <td style="color:{{date('Y-m-d') > $d->expire_dt?'red':''}}">{{ $d->expire_dt }}</td>
                     <td>{{ $d->created_by }}</td>                    
                     <td>
                          <a href="{{ url("/admin/prepaids/edit").'/'.$d->id }}" class="btn btn-sm btn-warning">Edit</a>

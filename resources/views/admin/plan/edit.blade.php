@@ -14,7 +14,7 @@
 					<div class="form-group">
 						<label>Plan Name</label> 
 						<input value="{{$data->name}}" name="name" type="text"
-							class="form-control" placeholder="Enter plan name" required>
+							class="form-control" placeholder="Enter plan name" required readonly>
 					</div>
 
 					<div class="form-group">
@@ -90,7 +90,7 @@
 
 					<br>
 					<div class="form-group text-center">
-						<button type="submit" class="btn btn-primary pull-right mr-3">Create</button>
+						<button type="submit" class="btn btn-primary pull-right mr-3">Update</button>
 						<a href="{{url('admin/plans')}}"
 							class="btn btn-default pull-right">Back</a>
 					</div>

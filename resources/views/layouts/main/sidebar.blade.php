@@ -21,7 +21,7 @@
       </li>
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
-        Billing
+        System
       </div>
       <li class="nav-item {{ checkIfActive('admin.users') }}">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUsers" aria-expanded="false" aria-controls="collapseBootstrap">
@@ -62,6 +62,28 @@
           </div>
         </div>
       </li>
+      
+      <li class="nav-item {{ checkIfActive('admin.sms') }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseSms" aria-expanded="false" aria-controls="collapseBootstrap">
+         <i class="fas fa-sms"></i>
+          <span>SMS</span>
+        </a>
+        <div id="collapseSms" class="collapse {{ checkIfShow('admin.sms') }}" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar" style="">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">SMS</h6>
+            <a class="collapse-item {{ checkIfActive('admin.sms.view') }}" href="{{ url("admin/sms") }}">History</a>
+            <a class="collapse-item {{ checkIfActive('admin.sms.send') }}" href="{{ url("admin/sms/send") }}">Send SMS</a>
+          </div>
+        </div>
+      </li>
+      
+      <li class="nav-item {{ checkIfActive('admin.reports.view') }}">
+        <a class="nav-link" href="{{ url("admin/reports") }}">
+          <i class="far fa-newspaper"></i>
+          <span>Reports</span></a>
+      </li>
+      
+      
       <hr class="sidebar-divider">
       <div class="sidebar-heading">
         Network
@@ -121,8 +143,6 @@
           </div>
         </div>
       </li>
-
-     
       <hr class="sidebar-divider">
       <div class="version" id="version-ruangadmin">Version 1.1</div>
     </ul>

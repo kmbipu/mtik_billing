@@ -6,7 +6,7 @@ use Exception;
 
 require_once 'PEAR2/Autoload.php';
 
-class PPPoeService
+class Pear2Service
 {
     private $client;
 
@@ -39,6 +39,9 @@ class PPPoeService
 
     public function editPool($name, $ip_range){
         try{
+            
+            $client = $this->client;
+            
             $printRequest = new RouterOS\Request(
                 '/ip pool print .proplist=name',
                 RouterOS\Query::where('name', $name)
@@ -46,8 +49,7 @@ class PPPoeService
             $poolName = $this->client->sendSync($printRequest)->getProperty('name');
             
             $setRequest = new RouterOS\Request('/ip/pool/set');
-
-            $client = $this->client;
+            
             $client($setRequest
                 ->setArgument('numbers', $poolName)
                 ->setArgument('ranges', $ip_range)
@@ -60,6 +62,8 @@ class PPPoeService
 
     public function deletePool($name){
         try{
+            $client = $this->client;
+            
             $printRequest = new RouterOS\Request(
                 '/ip pool print .proplist=name',
                 RouterOS\Query::where('name', $name)
@@ -67,7 +71,7 @@ class PPPoeService
             $poolName = $this->client->sendSync($printRequest)->getProperty('name');
             
             $removeRequest = new RouterOS\Request('/ip/pool/remove');
-            $client = $this->client;
+            
             $client($removeRequest
                 ->setArgument('numbers', $poolName)
             );
@@ -80,7 +84,7 @@ class PPPoeService
     public function addPPPoeUser($user,$pass,$plan) {
         try{
             $addRequest = new RouterOS\Request('/ppp/secret/add');
-            $client->sendSync($addRequest
+            $this->client->sendSync($addRequest
                 ->setArgument('name', $user)
                 ->setArgument('service', 'pppoe')
                 ->setArgument('profile', $plan)
@@ -88,19 +92,21 @@ class PPPoeService
                 );
         }
         catch (Exception $e) {
+            Helper::log($e->getMessage());
             throw new Exception('Unable to add pppoe user in server.');
         }
     }
     
     public function deletePPPoeUser($user) {
         try{
+            $client = $this->client;
             $printRequest = new RouterOS\Request(
                 '/ppp secret print .proplist=name',
                 RouterOS\Query::where('name', $user)
                 );
             $userName = $this->client->sendSync($printRequest)->getProperty('name');
             $removeRequest = new RouterOS\Request('/ppp/secret/remove');
-            $client = $this->client;
+            
             $client($removeRequest->setArgument('numbers', $userName));
         }
         catch (Exception $e) {
@@ -108,14 +114,14 @@ class PPPoeService
         }
     }
     
-    public function addProfile($name, $pool, $rate) {        
+    public function addProfile($plan_name, $pool_name, $rate) {        
         
         try{
             $addRequest = new RouterOS\Request('/ppp/profile/add');
             $this->client->sendSync($addRequest
-                ->setArgument('name', $name)
-                ->setArgument('local-address', $pool)
-                ->setArgument('remote-address', $pool)
+                ->setArgument('name', $plan_name)
+                ->setArgument('local-address', $pool_name)
+                ->setArgument('remote-address', $pool_name)
                 ->setArgument('rate-limit', $rate)
                 );
         }
@@ -124,25 +130,30 @@ class PPPoeService
         }
     }
     
-    public function editProfile($name, $pool, $rate) {        
+    public function editProfile($plan_name, $pool_name, $rate) {        
         
         try{
+            
+            $client = $this->client;
+            
             $printRequest = new RouterOS\Request(
                 '/ppp profile print .proplist=name',
-                RouterOS\Query::where('name', $name)
+                RouterOS\Query::where('name', $plan_name)
                 );
             $profileName = $client->sendSync($printRequest)->getProperty('name');
             
             $setRequest = new RouterOS\Request('/ppp/profile/set');
-            $client = $this->client;
+            
+            
             $client($setRequest
                 ->setArgument('numbers', $profileName)
-                ->setArgument('local-address', $pool)
-                ->setArgument('remote-address', $pool)
+                ->setArgument('local-address', $pool_name)
+                ->setArgument('remote-address', $pool_name)
                 ->setArgument('rate-limit', $rate)
                 );
         }
         catch (Exception $e) {
+            Helper::log($e->getMessage());
             throw new Exception('Unable to edit profile in server.');
         }
     }
@@ -151,6 +162,8 @@ class PPPoeService
         
         
         try{
+            
+            $client = $this->client;
             $printRequest = new RouterOS\Request(
                 '/ppp profile print .proplist=name',
                 RouterOS\Query::where('name', $name)
@@ -163,7 +176,44 @@ class PPPoeService
                 );
         }
         catch (Exception $e) {
+            Helper::log($e->getMessage());
             throw new Exception('Unable to delete pppoe user in server.');
+        }
+    }
+    
+    public function enablePPPoeUser($username){
+        try{
+            $client = $this->client;
+            $printRequest = new RouterOS\Request('/ppp/secret/print');
+            $printRequest->setArgument('.proplist', '.id');
+            $printRequest->setQuery(RouterOS\Query::where('name', $username));
+            $id = $client->sendSync($printRequest)->getProperty('.id');
+            
+            $setRequest = new RouterOS\Request('/ppp/secret/enable');
+            $setRequest->setArgument('numbers', $id);
+            $client->sendSync($setRequest);
+        }
+        catch (Exception $e) {
+            Helper::log($e->getMessage());
+            throw new Exception('Unable to enable pppoe user in server.');
+        }
+    }
+    
+    public function disablePPPoeUser($username){
+        try{
+            $client = $this->client;
+            $printRequest = new RouterOS\Request('/ppp/secret/print');
+            $printRequest->setArgument('.proplist', '.id');
+            $printRequest->setQuery(RouterOS\Query::where('name', $username));
+            $id = $client->sendSync($printRequest)->getProperty('.id');
+            
+            $setRequest = new RouterOS\Request('/ppp/secret/disable');
+            $setRequest->setArgument('numbers', $id);
+            $client->sendSync($setRequest);
+        }
+        catch (Exception $e) {
+            Helper::log($e->getMessage());
+            throw new Exception('Unable to disable pppoe user in server.');
         }
     }
 

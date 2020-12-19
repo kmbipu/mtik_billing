@@ -61,7 +61,7 @@ class PrepaidService
             } catch (\Exception $e) {
                 Helper::log($e->getMessage());
                 if($call){
-                    throw new Exception('$error');
+                    throw new Exception($error);
                 }
                 else{
                     Session::flash('error', $error);
@@ -71,7 +71,7 @@ class PrepaidService
         } else {            
             $error = Helper::errorToString($validator->errors()->all());
             if($call){
-                throw new Exception('$error');
+                throw new Exception($error);
             }                
             else{
                 Session::flash('error', $error);
@@ -80,13 +80,24 @@ class PrepaidService
         }
     }
 
-    public function updateStatusExpire($condition, $params)
+    public function updateStatusExpire($id, $params)
     {
         try {
-            $this->model->where($condition)->update($params); 
+            DB::beginTransaction();
+            $this->model->where(['id'=>$id])->update($params);
+            $prepaid = $this->model->find($id);
+            $username = $prepaid->user->username;
+            $p2s = new Pear2Service($prepaid->router_id);
+            if($params['status'])
+                $p2s->enablePPPoeUser($username);
+            else 
+                $p2s->disablePPPoeUser($username);
+            
+            DB::commit();
             Session::flash('success', 'Successfully updated.');
             return true;
         } catch (\Exception $e) {
+            DB::rollBack();
             Helper::log($e->getMessage());
             Session::flash('error', 'Unable to update.');
             return false;
@@ -97,7 +108,8 @@ class PrepaidService
     public function update($condition, $params, $call=false)
     {
         try {
-            $this->model->where($condition)->update($params);
+            $fill_data = $this->model->fill($params)->toArray();
+            $this->model->where($condition)->update($fill_data);
             $p2s = new Pear2Service($params['router_id']);
             $p2s->deletePPPoeUser($params['username']);
             $p2s->addPPPoeUser($params['username'], $params['password'], $params['plan_name']);
@@ -107,7 +119,7 @@ class PrepaidService
             Helper::log($e->getMessage());
             $error = 'Unable to update prepaid data.';
             if($call){
-                throw new Exception('$error');
+                throw new Exception($error);
             }
             else{
                 Session::flash('error', $error);
@@ -121,7 +133,12 @@ class PrepaidService
     {
         try {
             $record = $this->model->find($id);
+            $username= $record->user->username;
+            $router_id = $record->router_id;
             $record->delete();
+            $p2s = new Pear2Service($router_id);
+            $p2s->deletePPPoeUser($username);
+            
             Session::flash('success', 'Successfully deleted.');
             return true;
         } catch (Exception $e) {

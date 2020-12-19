@@ -14,7 +14,7 @@ class AuthController extends Controller
     {
         if(Auth::check()){
             $user = Auth::user();
-            $prefix = RoleService::find($user->role_id)->type;
+            $prefix = RoleService::find($user->role_id)->slug;
             return '/'.$prefix;
         }
         else{

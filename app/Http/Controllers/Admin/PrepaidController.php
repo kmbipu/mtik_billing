@@ -64,7 +64,7 @@ class PrepaidController extends Controller
     
     public function edit(Request $request, $id){
         if($request->method()=='POST'){
-            $this->service->updateStatusExpire(['id'=>$id], $this->filter($request->all()));
+            $this->service->updateStatusExpire($id, $this->filter($request->all()));
             return back();
         }
         $data = $this->service->find($id);
