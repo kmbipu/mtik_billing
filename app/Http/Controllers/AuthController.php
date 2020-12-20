@@ -36,6 +36,18 @@ class AuthController extends Controller
         return view('auth.login');
     }
     
+    
+    public function changePassword(Request $request) {
+        if($request->method()=='POST'){            
+            AuthService::changePassword($request->current_password, $request->new_password, $request->confirm_password);                  
+            return back();
+        } 
+        return view('auth.change_password');
+    }
+    
+    
+    
+    
     public function logout(Request $request)
     {
         Auth::logout();

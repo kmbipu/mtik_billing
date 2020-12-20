@@ -19,12 +19,12 @@ class PlanController extends Controller
         $this->service = new PlanService();
     }
 
-    public function index(){      
+    public function list(){      
         $args = $this->filter();
         $query = request('query');
         $data = $this->service->search($args, $query);
         $resellers = (new UserService)->getResellers();
-        return view('admin.plan.index', array('data'=>$data,'resellers'=>$resellers));
+        return view('admin.plan.list', array('data'=>$data,'resellers'=>$resellers));
     }
 
     public function add(Request $request){

@@ -21,12 +21,7 @@
                     </div>                    
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Role</label>
-                        <select class="form-control"  name="role_id" required>
-                        <option value="">Select Role</option>
-                        @foreach($roles as $role)
-                        <option value="{{$role->id}}" {{ $user->role_id==$role->id?'selected':''}}>{{$role->name}}</option>
-                        @endforeach
-                        </select>
+                        <input type="text" class="form-control" readonly="true" value="{{$user->role->name}}">
                     </div>
                     <div class="form-group">
                         <label for="exampleFormControlSelect1">Active Status</label>
@@ -61,7 +56,7 @@
                     <br>
                     <div class="form-group text-center">
                       <button type="submit" class="btn btn-primary pull-right mr-3">Update</button>
-                      <a href="{{url('admin/users')}}" class="btn btn-default pull-right">Back</a>
+                      <a href="{{url('admin/users/'.$slug.'s')}}" class="btn btn-default pull-right">Back</a>
                     </div>
                     
               </div>        

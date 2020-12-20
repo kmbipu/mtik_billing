@@ -15,11 +15,11 @@ class RouterController extends Controller
         $this->service = new RouterService();
     }
 
-    public function index(){
+    public function list(){
         $args = $this->filter();
         $query = request('query');
         $routers = $this->service->search($args,$query,true);
-        return view('admin.router.index', array('routers'=>$routers));
+        return view('admin.router.list', array('routers'=>$routers));
     }
 
     public function add(Request $request){

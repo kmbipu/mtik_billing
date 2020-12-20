@@ -17,9 +17,9 @@ class PermissionController extends Controller
         $this->service = new PermissionService();
     }
 
-    public function index(){
+    public function list(){
         $result = $this->service->search(request()->role_id);
-         return view('admin.permission.index', $result);
+         return view('admin.permission.list', $result);
     }
 
     public function refresh()

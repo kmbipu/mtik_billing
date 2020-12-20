@@ -15,22 +15,45 @@ class UserController extends Controller
     {
         $this->service = new UserService();
     }
-
-    public function index(){
+    
+    public function customerList(){
         $args = $this->filter();
+        $rs = new RoleService();
+        $args['role_id'] = $rs->search(['slug'=>'customer'])->first()->id;
+        $query = request('query');
+        $users = $this->service->search($args,$query,true);
+        return view('admin.user.customer_list', array('users'=>$users));
+    }
+
+    public function resellerList(){
+        $args = $this->filter();
+        $rs = new RoleService();
+        $rs = new RoleService();
+        $args['role_id'] = $rs->search(['slug'=>'reseller'])->first()->id;
         $query = request('query');
         $users = $this->service->search($args,$query,true);
         $roles = RoleService::getAll();
-        return view('admin.user.index', array('users'=>$users,'roles'=>$roles));
+        return view('admin.user.reseller_list', array('users'=>$users,'roles'=>$roles));
     }
 
-    public function add(Request $request){
+    public function addCustomer(Request $request){
         if($request->method()=='POST'){
             if($this->service->insert($request->all()))
                 return back();            
         }
-        $roles = RoleService::getAll();     
-        return view('admin.user.add',array('roles'=>$roles));
+        $rs = new RoleService();
+        $role = $rs->search(['slug'=>'customer'])->first();
+        return view('admin.user.add_customer',array('role'=>$role));
+    }
+    
+    public function addReseller(Request $request){
+        if($request->method()=='POST'){
+            if($this->service->insert($request->all()))
+                return back();
+        }
+        $rs = new RoleService();
+        $role = $rs->search(['slug'=>'reseller'])->first();
+        return view('admin.user.add_reseller',array('role'=>$role));
     }
 
     public function edit(Request $request, $id){
@@ -39,9 +62,9 @@ class UserController extends Controller
             return back();
         } 
         $user = $this->service->find($id);
-        $roles = RoleService::getAll();
+        $slug = RoleService::find($user->role_id)->slug;
         if($user)     
-            return view('admin.user.edit', array('user'=>$user,'roles'=>$roles));
+            return view('admin.user.edit', array('user'=>$user,'slug'=>$slug));
         else
             abort(404, "Not found");
     }

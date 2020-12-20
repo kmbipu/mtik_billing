@@ -1,9 +1,10 @@
 @extends('layouts.main')
-@section('pageTitle', 'Add User')
+@section('pageTitle', 'Add Reseller')
 
 @section('content')
 
 <form method="post">
+	<input type="hidden" name="role_id" value="{{$role->id}}">
   @csrf
   <div class="row">
       <div class="col-md-6 mb-4">
@@ -26,15 +27,6 @@
                     <div class="form-group">
                       <label>Confirm Password</label>
                       <input value="{{request('password_confirmation')}}" name="password_confirmation" type="password" class="form-control" placeholder="Enter password" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Role</label>
-                        <select class="form-control"  name="role_id" required>
-                        <option value="">Select Role</option>
-                        @foreach($roles as $r)
-                        <option value="{{$r->id}}" {{request('role_id')==$r->id?'selected':''}}>{{$r->name}}</option>
-                        @endforeach
-                        </select>
                     </div>
               </div>         
               
@@ -61,7 +53,7 @@
                     <br>
                     <div class="form-group text-center">
                       <button type="submit" class="btn btn-primary pull-right mr-3">Create</button>
-                      <a href="{{url('admin/users')}}" class="btn btn-default pull-right">Back</a>
+                      <a href="{{url('admin/users/'.$role->slug.'s')}}" class="btn btn-default pull-right">Back</a>
                     </div>
                     
               </div>        

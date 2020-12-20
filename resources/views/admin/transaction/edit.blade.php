@@ -40,8 +40,7 @@
 
 					<div class="form-group text-center">
 						<button type="submit" class="btn btn-primary pull-right mr-3">Update</button>
-						<a href="{{url('admin/transactions')}}"
-							class="btn btn-default pull-right">Back</a>
+		
 					</div>
 
 				</div>

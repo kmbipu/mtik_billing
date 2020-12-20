@@ -16,12 +16,20 @@ class TransactionController extends Controller
         $this->service = new TransactionService();
     }
     
-    public function index(){
+    public function rechargeList(Request $request){
         $args = $this->filter();
         $query = request('query');
+        $args['type'] = 'recharge';
+        $data = $this->service->custom_search($request->start_date, $request->end_date, $request->created_by, $request->query_str);
+        return view('admin.transaction.recharge_list', $data);
+    }
+    
+    public function transferList(){
+        $args = $this->filter();
+        $query = request('query');
+        $args['type'] = 'transfer';
         $data = $this->service->search($args, $query);
-        $resellers = (new UserService())->getResellers();
-        return view('admin.transaction.index', array('data'=>$data,'resellers'=>$resellers));
+        return view('admin.transaction.transfer_list', array('data'=>$data));
     }
     
     public function edit(Request $request, $id){
@@ -37,7 +45,7 @@ class TransactionController extends Controller
     }
     
     public function delete($id){
-       // $this->service->delete($id);
+        $this->service->delete($id);
         return back();
     }
 }

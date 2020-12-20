@@ -35,7 +35,8 @@ class TransactionService
         if(!empty($str)){
             $record = $record->where(function($query) use ($str) {
                 $query->orWhere('username','like',$str.'%')
-                ->orWhere('id','like',$str.'%');
+                ->orWhere('id','like',$str.'%')
+                ->orWhere('p_method','like',$str.'%');
             });
         }
         if($is_paginate)
@@ -44,6 +45,37 @@ class TransactionService
             $records = $record->get();
 
         return $records;
+    }
+    
+    public function custom_search($start_date, $end_date, $created_by, $str){
+        
+        $record =  $this->model->where([]);
+        
+        if($created_by)
+            $record =  $record->where(['created_by'=>$created_by]);
+    
+        if($start_date && $end_date){
+            $start_date = $start_date.' 00:00:00';
+            $end_date = $end_date.' 23:59:59';
+            $record = $record->where('created_at','>=', $start_date)->where('created_at','<=',$end_date);
+        }
+        
+        
+        if($str){
+            $record = $record->where(function($query) use ($str) {
+                $query->orWhere('username','like',$str.'%')
+                ->orWhere('id','like',$str.'%');
+            });
+        }
+        
+        $data = array();
+        
+        $data['total']= $record->sum('amount');
+        
+        $data['data'] = $record->paginate(15);
+                
+        return $data;
+        
     }
 
     public function insert($params, $call=false){

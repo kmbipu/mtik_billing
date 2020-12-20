@@ -16,11 +16,11 @@ class BandwidthController extends Controller
         $this->service = new BandwidthService();
     }
 
-    public function index(){      
+    public function list(){      
         $args = $this->filter();
         $query = request('query');
         $data = $this->service->search($args, $query);
-        return view('admin.bandwidth.index', array('data'=>$data));
+        return view('admin.bandwidth.list', array('data'=>$data));
     }
 
     public function add(Request $request){

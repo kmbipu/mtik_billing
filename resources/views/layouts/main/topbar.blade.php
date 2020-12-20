@@ -46,12 +46,12 @@
                   ID - {{Auth::user()->id}}
                 </a>
 
-                <!--  <div class="dropdown-divider"></div>
+                <div class="dropdown-divider"></div>
 
                 <a class="dropdown-item" href="{{url('/change-password')}}">
                   <i class="fas fa-cogs fa-sm fa-fw mr-2 text-gray-400"></i>
                   Change Password
-                </a>-->
+                </a>
 
                 <div class="dropdown-divider logout-div"></div>
                 <a class="dropdown-item logout-div" href="{{url('/logout')}}">

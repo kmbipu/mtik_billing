@@ -17,9 +17,9 @@ class RoleController extends Controller
         $this->service = new RoleService();
     }
 
-    public function index(){
+    public function list(){
         $roles = $this->service->search();
-        return view('admin.role.index', array('roles'=>$roles));
+        return view('admin.role.list', array('roles'=>$roles));
     }
 
     public function add(Request $request){

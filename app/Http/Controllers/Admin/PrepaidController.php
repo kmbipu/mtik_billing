@@ -20,13 +20,13 @@ class PrepaidController extends Controller
         $this->service = new PrepaidService();
     }
     
-    public function index(){
+    public function list(){
         $args = $this->filter();
         $query = request('query');
         $data = $this->service->search($args, $query);
         $resellers = (new UserService)->getResellers();
         $plans = PlanService::getAll();
-        return view('admin.prepaid.index', array('data'=>$data,'resellers'=>$resellers,'plans'=>$plans));
+        return view('admin.prepaid.list', array('data'=>$data,'resellers'=>$resellers,'plans'=>$plans));
     }
     
     public function recharge(Request $request){

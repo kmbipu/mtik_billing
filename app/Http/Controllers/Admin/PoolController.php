@@ -17,11 +17,11 @@ class PoolController extends Controller
         $this->service = new PoolService();
     }
 
-    public function index(){      
+    public function list(){      
         $args = $this->filter();
         $query = request('query');
         $data = $this->service->search($args, $query);
-        return view('admin.pool.index', array('data'=>$data));
+        return view('admin.pool.list', array('data'=>$data));
     }
 
     public function add(Request $request){

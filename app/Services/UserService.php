@@ -134,7 +134,7 @@ class UserService
             return Validator::make($data, [
                 'name' => ['required', 'string', 'max:255'],
                 'username' => ['required', 'string', 'max:255'],
-                'password' => ['required', 'string', 'min:6', 'confirmed'],
+                'password' => ['required', 'string', 'min:8', 'confirmed'],
                 'role_id' => ['required', 'integer'],
                 'phone' => ['required', 'string', 'max:11'],
                 'address' => ['required', 'string', 'max:255'],
@@ -144,7 +144,6 @@ class UserService
         else{
             return Validator::make($data, [
                 'name' => ['required', 'string', 'max:255'],
-                'role_id' => ['required', 'integer'],
                 'phone' => ['required', 'string', 'max:11'],
                 'address' => ['required', 'string', 'max:255'],
                 'nid' => ['required', 'string', 'max:20'],
