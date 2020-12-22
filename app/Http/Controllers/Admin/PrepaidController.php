@@ -23,10 +23,10 @@ class PrepaidController extends Controller
     public function list(){
         $args = $this->filter();
         $query = request('query');
-        $data = $this->service->search($args, $query);
-        $resellers = (new UserService)->getResellers();
+        $data = $this->service->search($args, $query, true);
+        $sellers = (new UserService)->getSellers();
         $plans = PlanService::getAll();
-        return view('admin.prepaid.list', array('data'=>$data,'resellers'=>$resellers,'plans'=>$plans));
+        return view('admin.prepaid.list', array('data'=>$data,'sellers'=>$sellers,'plans'=>$plans));
     }
     
     public function recharge(Request $request){
@@ -46,7 +46,7 @@ class PrepaidController extends Controller
             }
         }
         
-        $users = UserService::getOwnCustomers();
+        $users = UserService::getCustomers();
         $routers = RouterService::getAll();
         return view('admin.prepaid.recharge',['users'=>$users,'routers'=>$routers]);
     }

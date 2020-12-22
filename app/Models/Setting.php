@@ -5,16 +5,11 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SMS extends Model
+class Setting extends Model
 {
     use HasFactory;
-    
-    protected $table = 'sms';
-    
     protected $fillable = [
-        'phone',
-        'message',
-        'status',
-        'reason',
+        'key',
+        'value',
     ];
 }

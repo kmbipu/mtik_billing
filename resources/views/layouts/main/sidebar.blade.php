@@ -6,7 +6,7 @@
 @endphp
 
 <ul class="navbar-nav sidebar sidebar-light accordion" id="accordionSidebar">
-      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+      <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{{url('/')}}">
         <div class="sidebar-brand-icon">
           <!--<img src="{{ asset('resources/assets/img/logo/logo.png') }}">-->
           <i class="fa fa-wifi fa-lg"></i>
@@ -75,6 +75,7 @@
             <h6 class="collapse-header">SMS</h6>
             <a class="collapse-item {{ checkIfActive('admin.sms.list') }}" href="{{ url("admin/sms") }}">History</a>
             <a class="collapse-item {{ checkIfActive('admin.sms.send') }}" href="{{ url("admin/sms/send") }}">Send SMS</a>
+            <a class="collapse-item {{ checkIfActive('admin.sms.setting') }}" href="{{ url("admin/sms/setting") }}">Setting</a>
           </div>
         </div>
       </li>

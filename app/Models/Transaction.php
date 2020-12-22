@@ -20,7 +20,7 @@ class Transaction extends Model
         'type',
         'p_method',
         'p_trxid',
-        'reseller_id',
+        'seller_id',
         'created_by'
     ];
     

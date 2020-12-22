@@ -47,12 +47,12 @@ class TransactionService
         return $records;
     }
     
-    public function custom_search($start_date, $end_date, $created_by, $str){
+    public function custom_search($start_date, $end_date, $seller_id, $str){
         
         $record =  $this->model->where([]);
         
-        if($created_by)
-            $record =  $record->where(['created_by'=>$created_by]);
+        if($seller_id)
+            $record =  $record->where(['seller_id'=>$seller_id]);
     
         if($start_date && $end_date){
             $start_date = $start_date.' 00:00:00';
@@ -67,6 +67,7 @@ class TransactionService
                 ->orWhere('id','like',$str.'%');
             });
         }
+        $record = $record->orderBy('id','desc');
         
         $data = array();
         
@@ -83,6 +84,7 @@ class TransactionService
         if ($validator->passes()) {           
             try{
                 $params['created_by'] = Auth::user()->id;
+                $params['seller_id'] = UserService::find($params['user_id'])->created_by;
                 $this->model->create($params);
                 return true;
             }
@@ -145,6 +147,7 @@ class TransactionService
             'type' => ['required', 'string'],
             'p_trxid' => ['required', 'string'],
             'p_method' => ['required', 'string'],
+            'seller_id' =>['required', 'integer'],
         ]);
 
     }

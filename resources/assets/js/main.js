@@ -7,6 +7,12 @@
 	
 	$("document").ready(function(){
 		
+		$('.select2-single').on('select2:select', function (e) {
+		    $("#select-router-for-plans").val('');
+			var e = $("#load-plans-by-router");
+		   e.html("<option value=''>Select Plan</option>");
+		});
+		
 		
 		$("#select-router-for-pools").change(function(){
 			
@@ -37,15 +43,23 @@
 		
 		
 		$("#select-router-for-plans").change(function(){
-			
+
 		   var r_id = $(this).val();
 		   var e = $("#load-plans-by-router");
 		   e.html("<option value=''>Select Plan</option>");
 
 		   if(r_id=='' || r_id==undefined)
-				return;									
+				return;	
+				
+			var user_id = $('.select2-single').select2('data')[0].id;
+			if(user_id==undefined || user_id==''){
+				alert("Select a customer first.");
+				$(this).val('');
+				return;
+			}	
+												
 		   $.ajax({
-		      url: site_url+'/admin/plans/get-by-router/'+r_id,
+		      url: site_url+'/admin/plans/get-by-router/'+r_id+'?user_id='+user_id,
 			  type: 'GET',
 		      dataType: 'json',
 		      success: function(data) {

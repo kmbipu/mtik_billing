@@ -28,21 +28,21 @@
             <div class="mb-4 row">
             	
             	<div class="col-sm-2">
-                    <input name="start_date" class="datepicker form-control form-control-sm" type="text" placeholder="Start Date" aria-label="Search" value="{{request('start_date')}}" autocomplete="off">
+                    <input name="start_date" class="datepicker form-control form-control-sm auto-align" type="text" placeholder="Start Date" aria-label="Search" value="{{request('start_date')}}" autocomplete="off">
                 </div>
                 <div class="col-sm-2">
-                    <input name="end_date" class="datepicker form-control form-control-sm" type="text" placeholder="End Date" aria-label="Search" value="{{request('end_date')}}" autocomplete="off">
+                    <input name="end_date" class="datepicker form-control form-control-sm auto-align" type="text" placeholder="End Date" aria-label="Search" value="{{request('end_date')}}" autocomplete="off">
                 </div>
                 
                 <div class="col-sm-2">
-                    <input name="created_by" class="form-control form-control-sm" type="text" placeholder="Admin/Reseller ID" aria-label="Search" value="{{request('created_by')}}">
+                    <input name="seller_id" class="form-control form-control-sm auto-align" type="text" placeholder="Seller ID" aria-label="Search" value="{{request('seller_id')}}">
                 </div>
                 <div class="col-sm-3">
-                    <input name="query" class="form-control form-control-sm" type="text" placeholder="ID,User,Method.." aria-label="Search" value="{{request('query_str')}}">
+                    <input name="query_str" class="form-control form-control-sm auto-align" type="text" placeholder="ID,User,Method.." aria-label="Search" value="{{request('query_str')}}">
                 </div>
                  <div class="col-sm-3">
-                     <button href="#" class="btn btn-sm btn-info btn-md my-0 ml-sm-2" type="submit"><i class="fa fa-search"></i> Search</button>
-                     <a href="{{url('admin/transactions/recharges')}}" class="btn btn-sm btn-default btn-md my-0 ml-sm-2" >Reset</a>
+                     <button href="#" class="btn btn-sm btn-primary auto-align" type="submit"><i class="fa fa-search"></i> Search</button>
+                     <a href="{{url('admin/transactions/recharges')}}" class="btn btn-sm btn-default auto-align" >Reset</a>
                  </div>  
           
             </div>
@@ -85,8 +85,9 @@
                     @endforeach
                 </tbody>
                 </table>
+                
             </div>           
-            <div class="card-footer"></div>
+            <div class="card-footer">{{ $data->appends(request()->all())->links('paginator') }}</div>
         </div>
     </div>
 </div>

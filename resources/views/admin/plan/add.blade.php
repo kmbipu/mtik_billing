@@ -42,12 +42,28 @@
 					
 					<div class="form-group">
 						<label for="exampleFormControlSelect1">Admin/Reseller</label> 
-						<select	class="form-control" name="reseller_id">
-							<option value="">For Admin</option> 
-							@foreach($resellers as $reseller)
-							<option value="{{$reseller->id}}" {{request('reseller_id')==$reseller->id?'selected':''}}>{{$reseller->id}}-{{$reseller->name}}</option>
+						<select	class="form-control" name="seller_id" required>
+							<option value="">Select Seller</option> 
+							@foreach($sellers as $seller)
+							<option value="{{$seller->id}}" {{request('seller_id')==$seller->id?'selected':''}}>{{$seller->id}}-{{$seller->name}}</option>
 							@endforeach
 						</select>
+					</div>
+					
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-8">
+    							<label>Validity</label> 
+    							<input value="{{request('validity')}}" name="validity" type="number" class="form-control" placeholder="Enter validity" required>
+							</div>
+							<div class="col-sm-4">
+								<label>Unit</label> 
+								<select	class="form-control" name="validity_unit" required>
+									<option value="days" {{request('validity_unit'=='days'?'selected':'')}}>Days</option>
+									<option value="month" {{request('validity_unit'=='month'?'selected':'')}}>Month</option>
+								</select>
+							</div>
+						</div>
 					</div>
 				</div>
 
@@ -69,20 +85,22 @@
 						<input value="{{request('discount')}}" name="discount" type="number" class="form-control" placeholder="Enter discount(optional)">
 					</div>
 					
+					
+					
 					<div class="form-group">
-						<div class="row">
-							<div class="col-sm-8">
-    							<label>Validity</label> 
-    							<input value="{{request('validity')}}" name="validity" type="number" class="form-control" placeholder="Enter validity" required>
-							</div>
-							<div class="col-sm-4">
-								<label>Unit</label> 
-								<select	class="form-control" name="validity_unit" required>
-									<option value="days" {{request('validity_unit'=='days'?'selected':'')}}>Days</option>
-									<option value="month" {{request('validity_unit'=='month'?'selected':'')}}>Month</option>
-								</select>
-							</div>
-						</div>
+						<label for="exampleFormControlSelect1">Active/Inactive</label> 
+						<select	class="form-control" name="is_active">
+							<option value="1" selected>Yes</option> 
+							<option value="0" >No</option> 
+						</select>
+					</div>
+					
+					<div class="form-group">
+						<label for="exampleFormControlSelect1">Home Display</label> 
+						<select	class="form-control" name="is_display">
+							<option value="1">Yes</option> 
+							<option value="0" selected>No</option> 
+						</select>
 					</div>
 
 					<br>

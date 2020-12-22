@@ -6,12 +6,15 @@ use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Services\RoleService;
 use App\Services\PrepaidService;
+use App\Services\PlanService;
 
 class PageController extends Controller
 {
     
     public function home() {
-        return view('page.home');
+        $ps = new PlanService();
+        $plans = $ps->search(['is_active'=>1,'is_display'=>1]);
+        return view('page.home',['plans'=>$plans]);
     }
     
     public function adminHome()

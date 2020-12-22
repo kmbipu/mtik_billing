@@ -22,11 +22,11 @@ class CreateTransactionsTable extends Migration
             $table->date('start_dt');
             $table->date('expire_dt');
             $table->string('status',50); //pending/complete
-            $table->string('type',100); //recharge, transfer(plus or minus amount)
+            $table->string('type',100); //recharge, transfer(plus or minus amount), commission
             $table->string('p_method',100); //auto_bkash, manual_bkash, cash
             $table->string('p_trxid',100); 
             $table->string('p_notes',255)->nullable(); //
-            $table->integer('reseller_id')->default(0);
+            $table->integer('seller_id');
             $table->unsignedBigInteger('created_by');            
             $table->timestamps();
             $table->foreign('user_id')

@@ -44,14 +44,30 @@
 					</div>
 					
 					<div class="form-group">
-						<label for="exampleFormControlSelect1">Admin/Reseller</label> 
-						<select	class="form-control" name="reseller_id">
-							<option value="0">Admin</option> 
-							@foreach($resellers as $reseller)
-							<option value="{{$reseller->id}}" {{$reseller->id==$data->reseller_id?'selected':''}}>{{$reseller->id}}-{{$reseller->name}}</option>
+						<label for="exampleFormControlSelect1">Seller</label> 
+						<select	class="form-control" name="seller_id" required>
+							@foreach($sellers as $seller)
+							<option value="{{$seller->id}}" {{$seller->id==$data->seller_id?'selected':''}}>{{$seller->id}}-{{$seller->name}}</option>
 							@endforeach
 						</select>
 					</div>
+					
+					<div class="form-group">
+						<div class="row">
+							<div class="col-sm-8">
+    							<label>Validity</label> <input value="{{$data->validity}}" name="validity" type="number"
+    							class="form-control" placeholder="Enter validity" required>
+							</div>
+							<div class="col-sm-4">
+								<label>Unit</label> 
+								<select	class="form-control" name="validity_unit" required>
+									<option value="days" {{$data->validity_unit=='days'?'selected':''}}>Days</option>
+									<option value="month" {{$data->validity_unit=='month'?'selected':''}}>Month</option>
+								</select>
+							</div>
+						</div>
+					</div>
+					
 				</div>
 
 			</div>
@@ -73,19 +89,19 @@
 					</div>
 					
 					<div class="form-group">
-						<div class="row">
-							<div class="col-sm-8">
-    							<label>Validity</label> <input value="{{$data->validity}}" name="validity" type="number"
-    							class="form-control" placeholder="Enter validity" required>
-							</div>
-							<div class="col-sm-4">
-								<label>Unit</label> 
-								<select	class="form-control" name="validity_unit" required>
-									<option value="days" {{$data->validity_unit=='days'?'selected':''}}>Days</option>
-									<option value="month" {{$data->validity_unit=='month'?'selected':''}}>Month</option>
-								</select>
-							</div>
-						</div>
+						<label for="exampleFormControlSelect1">Active/Inactive</label> 
+						<select	class="form-control" name="is_active">
+							<option value="1" {{$data->is_active=='1'?'selected':''}}>Yes</option> 
+							<option value="0" {{$data->is_active=='0'?'selected':''}}>No</option> 
+						</select>
+					</div>
+					
+					<div class="form-group">
+						<label for="exampleFormControlSelect1">Home Display</label> 
+						<select	class="form-control" name="is_display">
+							<option value="1" {{$data->is_display=='1'?'selected':''}}>Yes</option> 
+							<option value="0" {{$data->is_display=='0'?'selected':''}}>No</option> 
+						</select>
 					</div>
 
 					<br>

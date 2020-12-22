@@ -2,17 +2,16 @@
 @section('pageTitle', 'All PPPoe Users')
 
 @section('headerRight')
-<form class="form-inline ml-auto ng-pristine ng-valid" method="get" action="">
+<form class="form-inline" method="get" action="">
 	<div class="md-form my-0 mr-2">
         <select id="User Type" name="created_by" class="form-control form-control-sm">
-            <option value="">Show All</option>
-            <option value="{{Auth::user()->id}}">My Users</option>
-            @foreach($resellers as $r) 
+            <option value="">Select Seller</option>
+            @foreach($sellers as $r) 
             	<option value="{{$r->id}}" {{request('created_by')==$r->id?'selected':''}}>{{$r->name}}</option>
             @endforeach
         </select>
     </div>
-    <div class="md-form my-0 mr-2">
+    <div class="md-form auto-align">
         <select id="User Type" name="plan_id" class="form-control form-control-sm">
             <option value="">All Plans</option>
             @foreach($plans as $p) 
@@ -20,10 +19,10 @@
             @endforeach
         </select>
     </div>
-    <div class="md-form my-0">
-        <input  name="query" class="form-control form-control-sm" type="text" placeholder="Search here" aria-label="Search" value="{{request('query')}}">
+    <div class="md-form auto-align">
+        <input  name="query" class="form-control form-control-sm" type="text" placeholder="Search name, user, id" aria-label="Search" value="{{request('query')}}">
     </div>
-    <button href="#" class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" type="submit"><i class="fa fa-search"></i></button>
+    <button href="#" class="btn btn-sm btn-primary auto-align" type="submit"><i class="fa fa-search"></i></button>
 </form>
 @endsection
 
@@ -40,7 +39,7 @@
                     <th>Plan</th>    
                     <th>Start</th>   
                     <th>Expire</th>
-                    <th>Owner</th>
+                    <th>Seller</th>
                     <th>Action</th>
                     </tr>
                 </thead>
@@ -62,7 +61,7 @@
                 </tbody>
                 </table>
             </div>           
-            <div class="card-footer"></div>
+            <div class="card-footer">{{ $data->appends(request()->all())->links('paginator') }}</div>
         </div>
     </div>
 </div>

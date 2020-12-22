@@ -23,7 +23,9 @@ class CreatePlansTable extends Migration
             $table->integer('discount')->default(0);
             $table->integer('validity');
             $table->string('validity_unit',10);
-            $table->integer('reseller_id')->nullable();
+            $table->integer('seller_id');
+            $table->integer('is_display')->default(0);
+            $table->integer('is_active')->default(0);
             $table->timestamps();
             $table->foreign('router_id')
             ->references('id')

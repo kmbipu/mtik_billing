@@ -9,6 +9,7 @@ require_once 'PEAR2/Autoload.php';
 class Pear2Service
 {
     private $client;
+    private $debug = true;
 
     public function __construct($router_id)
     {
@@ -16,7 +17,9 @@ class Pear2Service
         $this->connect($router);
     }
 
-    private function connect($router){   
+    private function connect($router){
+        if($this->debug){return false;}
+        
         try {
             $this->client = new RouterOS\Client($router->ip, $router->username, $router->password);
         } catch (Exception $e) {
@@ -25,6 +28,7 @@ class Pear2Service
     }
 
     public function addPool($name, $ip_range){
+        if($this->debug){return false;}
         try{
             $addRequest = new RouterOS\Request('/ip/pool/add');
             $this->client->sendSync($addRequest
@@ -38,6 +42,7 @@ class Pear2Service
     }
 
     public function editPool($name, $ip_range){
+        if($this->debug){return false;}
         try{
             
             $client = $this->client;
@@ -61,6 +66,7 @@ class Pear2Service
     }
 
     public function deletePool($name){
+        if($this->debug){return false;}
         try{
             $client = $this->client;
             
@@ -82,6 +88,7 @@ class Pear2Service
     }
     
     public function addPPPoeUser($user,$pass,$plan) {
+        if($this->debug){return false;}
         try{
             $addRequest = new RouterOS\Request('/ppp/secret/add');
             $this->client->sendSync($addRequest
@@ -98,6 +105,7 @@ class Pear2Service
     }
     
     public function deletePPPoeUser($user) {
+        if($this->debug){return false;}
         try{
             $client = $this->client;
             $printRequest = new RouterOS\Request(
@@ -115,7 +123,7 @@ class Pear2Service
     }
     
     public function addProfile($plan_name, $pool_name, $rate) {        
-        
+        if($this->debug){return false;}
         try{
             $addRequest = new RouterOS\Request('/ppp/profile/add');
             $this->client->sendSync($addRequest
@@ -131,7 +139,7 @@ class Pear2Service
     }
     
     public function editProfile($plan_name, $pool_name, $rate) {        
-        
+        if($this->debug){return false;}
         try{
             
             $client = $this->client;
@@ -159,7 +167,7 @@ class Pear2Service
     }
     
     public function deleteProfile($name) {
-        
+        if($this->debug){return false;}
         
         try{
             
@@ -182,6 +190,7 @@ class Pear2Service
     }
     
     public function enablePPPoeUser($username){
+        if($this->debug){return false;}
         try{
             $client = $this->client;
             $printRequest = new RouterOS\Request('/ppp/secret/print');
@@ -200,6 +209,7 @@ class Pear2Service
     }
     
     public function disablePPPoeUser($username){
+        if($this->debug){return false;}
         try{
             $client = $this->client;
             $printRequest = new RouterOS\Request('/ppp/secret/print');

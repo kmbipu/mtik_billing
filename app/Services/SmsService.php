@@ -26,18 +26,19 @@ class SmsService
     }
 
     public function search($params=[], $str="", $is_paginate = false, $rows = 15){
-        $role = $this->model->where($params);
+        $record = $this->model->where($params);
         if(!empty($str)){
-            $role = $role->where(function($query) use ($str) {
+            $record = $record->where(function($query) use ($str) {
                 $query->orWhere('name','like',$str.'%');
             });
         }
+        $record = $record->orderBy('id','desc');
         if($is_paginate)
-            $roles = $role->paginate($rows);
+            $records = $record->paginate($rows);
         else
-            $roles = $role->get();
+            $records = $role->get();
 
-        return $roles;
+            return $records;
     }
 
     public function insert($params){
@@ -52,7 +53,27 @@ class SmsService
             return false;
         }
     }
-
+    
+    public function sendMessage($phone,$message){        
+        if($phone=='' || $phone==null || $message=='' || $message==null){
+            return false;
+        }
+        try{
+            $gs = new GatewayService();
+            $result = $gs->sendSMS($phone, $message);
+            if($result)
+                $data = array('phone'=>$phone,'message'=>$message,'status'=>1);
+            else
+                $data = array('phone'=>$phone,'message'=>$message,'status'=>0,'reason'=>$gs->error);            
+            $this->model->create($data);
+            return true;
+        }
+        catch (Exception $e){
+            Helper::log($e->getMessage());
+            return false;
+        }        
+    } 
+    
     
     public function sendSingle($phone,$message){
         if($phone=='' || $phone==null || $message=='' || $message==null){
@@ -81,7 +102,8 @@ class SmsService
             return false;
         }     
         
-    }
+    }    
+    
     
     public function sendGroup($group,$message){
         
@@ -110,11 +132,17 @@ class SmsService
                 $users = $us->search(['role_id'=>$res_role]);
             }
             
+            $phone = '';
             foreach ($users as $u){
-                $result = $gs->sendSMS($u->phone, $message);
+                $phone = $phone . $u->phone.',';               
+            }
+            $phone = rtrim($phone,',');
+            
+            if($phone){
+                $result = $gs->sendSMS($phone, $message);
                 if($result)
                     $data = array('phone'=>$phone,'message'=>$message,'status'=>1);
-                else 
+                else
                     $data = array('phone'=>$phone,'message'=>$message,'status'=>0,'reason'=>$gs->error);
                 $this->model->create($data);
             }

@@ -2,12 +2,12 @@
 @section('pageTitle', 'All Resellers')
 
 @section('headerRight')
-<form class="form-inline ml-auto ng-pristine ng-valid" method="get" action="">
-    <div class="md-form my-0">
-        <input name="query" class="form-control form-control-sm" type="text" placeholder="Search here" aria-label="Search" value="{{request('query')}}">
+<form class="form-inline" method="get" action="">
+    <div class="md-form auto-align">
+        <input name="query" class="form-control form-control-sm" type="text" placeholder="Search name, user, phone" aria-label="Search" value="{{request('query')}}">
     </div>
-    <button href="#" class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" type="submit"><i class="fa fa-search"></i></button>
-    <a class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" href="{{url('admin/users/resellers/add')}}"><i class="fas fa-plus"></i> Add New</a>
+    <button href="#" class="btn btn-sm btn-primary auto-align" type="submit"><i class="fa fa-search"></i></button>
+    <a class="btn btn-sm btn-primary auto-align" href="{{url('admin/users/resellers/add')}}"><i class="fas fa-plus"></i> Add New</a>
 
 </form>
 @endsection
@@ -48,7 +48,7 @@
                 </tbody>
                 </table>
             </div>           
-            <div class="card-footer"></div>
+            <div class="card-footer">{{ $users->appends(request()->all())->links('paginator') }}</div>
         </div>
     </div>
 </div>

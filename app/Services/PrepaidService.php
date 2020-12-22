@@ -40,7 +40,7 @@ class PrepaidService
                     ->orWhere('prepaids.user_id', 'like', $str . '%');
             });
         }
-
+        $record = $record->orderBy('id','desc');
         if ($is_paginate)
             $records = $record->paginate($rows);
         else
@@ -168,7 +168,7 @@ class PrepaidService
             
             $trans = array(
                 'user_id' => $params['prepaid']['user_id'],
-                'username' => UserService::find($params['prepaid']['user_id'])->username,
+                'username' => $user->username,
                 'plan_name' => $plan->name,
                 'amount' => $plan->price,
                 'start_dt' => $params['prepaid']['start_dt'],
@@ -182,6 +182,7 @@ class PrepaidService
             $ts = new TransactionService();
             $ts->insert($trans, true);
             DB::commit();
+            $this->sendRechargeSMS($user->id, $user->phone, $plan->price);
             Session::flash('success', 'Successfully renewed.');
             return true;
         } catch (Exception $e) {
@@ -214,7 +215,7 @@ class PrepaidService
             
             $trans = array(
                 'user_id' => $params['prepaid']['user_id'],
-                'username' => UserService::find($params['prepaid']['user_id'])->username,
+                'username' => $user->username,
                 'plan_name' => $plan->name,
                 'amount' => $plan->price,
                 'start_dt' => $params['prepaid']['start_dt'],
@@ -228,6 +229,7 @@ class PrepaidService
             $ts->insert($trans,true);
             
             DB::commit();
+            $this->sendRechargeSMS($user->id, $user->phone, $plan->price);
             Session::flash('success', 'Successfully recharged.');
             return true;
             
@@ -292,6 +294,30 @@ class PrepaidService
         );
 
         return (object) $data;
+    }
+    
+    
+    private function sendRechargeSMS($user_id, $phone, $amount){
+        try{
+        $setting = SettingService::find('sms');
+        if($setting==null){
+            return false;
+        }
+        
+        $sms = json_decode($setting);
+        if(empty($phone) || empty($sms->recharge_message) || empty($sms->recharge_message)){
+            return false;
+        }        
+        $ss = new SmsService();
+        $message = $sms->recharge_message;
+        $message = str_replace('<id>', $user_id, $message);
+        $message = str_replace('<amount>', $amount, $message);
+        
+        $ss->sendMessage($phone, $message);
+        }
+        catch (Exception $e){
+            Helper::log($e->getMessage());
+        }
     }
 
     protected function validator(array $data)

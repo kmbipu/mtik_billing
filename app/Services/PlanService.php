@@ -147,6 +147,7 @@ class PlanService
                 'price' => ['required', 'integer'],
                 'validity' => ['required', 'integer'],
                 'validity_unit' => ['required', 'string', 'max:10'],
+                'seller_id'=>['required', 'integer'],
             ]);
         }
         else{
@@ -158,6 +159,7 @@ class PlanService
                 'price' => ['required', 'integer'],
                 'validity' => ['required', 'integer'],
                 'validity_unit' => ['required', 'string', 'max:10'],
+                'seller_id'=>['required', 'integer'],
             ]);
         }
     }

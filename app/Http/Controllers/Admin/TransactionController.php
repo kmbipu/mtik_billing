@@ -20,7 +20,7 @@ class TransactionController extends Controller
         $args = $this->filter();
         $query = request('query');
         $args['type'] = 'recharge';
-        $data = $this->service->custom_search($request->start_date, $request->end_date, $request->created_by, $request->query_str);
+        $data = $this->service->custom_search($request->start_date, $request->end_date, $request->seller_id, $request->query_str);
         return view('admin.transaction.recharge_list', $data);
     }
     

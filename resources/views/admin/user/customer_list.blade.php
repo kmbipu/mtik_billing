@@ -2,15 +2,15 @@
 @section('pageTitle', 'All Customers')
 
 @section('headerRight')
-<form class="form-inline ml-auto ng-pristine ng-valid" method="get" action="">
-	<div class="md-form my-0">
-        <input name="created_by" class="form-control form-control-sm" type="text" placeholder="Reseller ID" aria-label="Search" value="{{request('created_by')}}">
+<form class="form-inline " method="get" action="">
+	<div class="md-form auto-align">
+        <input name="created_by" class="form-control form-control-sm" type="text" placeholder="Created By ID" aria-label="Search" value="{{request('created_by')}}">
     </div>
-    <div class="md-form my-0 ml-sm-2">
-        <input name="query" class="form-control form-control-sm" type="text" placeholder="Search here" aria-label="Search" value="{{request('query')}}">
+    <div class="md-form auto-align">
+        <input name="query" class="form-control form-control-sm" type="text" placeholder="Search name, user, phone" aria-label="Search" value="{{request('query')}}">
     </div>
-    <button href="#" class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" type="submit"><i class="fa fa-search"></i></button>
-    <a class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" href="{{url('admin/users/customers/add')}}"><i class="fas fa-plus"></i> Add New</a>
+    <button href="#" class="btn btn-sm btn-primary auto-align" type="submit"><i class="fa fa-search"></i></button>
+    <a class="btn btn-sm btn-primary auto-align" href="{{url('admin/users/customers/add')}}"><i class="fas fa-plus"></i> Add New</a>
 
 </form>
 @endsection
@@ -28,7 +28,7 @@
                     <th>Name</th>
                     <th>User</th>
                     <th>Phone</th>
-                    <th>Status</th>
+                    <th>Seller</th>
                     <th>Action</th>
                     </tr>
                 </thead>
@@ -38,8 +38,8 @@
                     <td>{{ $user->id }}</td>
                     <td>{{ $user->name }}</td> 
                     <td>{{ $user->username }}</td> 
-                    <td>{{ $user->phone }}</td>                   
-                    <td>{{ $user->active_status?'active':'inactive' }}</td> 
+                    <td>{{ $user->phone }}</td>
+                    <td>{{ $user->created_by }}</td>                 
                     <td>
                         <a href="{{ url("/admin/users/edit").'/'.$user->id }}" class="btn btn-sm btn-warning">Edit</a> 
                         <a d_id="{{$user->id}}" d_action="{{url('/admin/users/delete/'.$user->id)}}" href="#" class="btn btn-sm btn-danger delete-action-btn">Delete</a>
@@ -49,7 +49,8 @@
                 </tbody>
                 </table>
             </div>           
-            <div class="card-footer"></div>
+            <div class="card-footer">{{ $users->appends(request()->all())->links('paginator') }}</div>
+
         </div>
     </div>
 </div>

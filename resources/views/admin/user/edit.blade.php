@@ -23,14 +23,7 @@
                         <label for="exampleFormControlSelect1">Role</label>
                         <input type="text" class="form-control" readonly="true" value="{{$user->role->name}}">
                     </div>
-                    <div class="form-group">
-                        <label for="exampleFormControlSelect1">Active Status</label>
-                        <select class="form-control"  name="active_status" required>
-                        <option value="">Select Status</option>
-                        <option value="1" {{ $user->active_status?'selected':''}}>Active</option>
-                        <option value="0" {{ !$user->active_status?'selected':''}}>Inactive</option>
-                        </select>
-                    </div>
+                    
               </div>         
               
           </div>

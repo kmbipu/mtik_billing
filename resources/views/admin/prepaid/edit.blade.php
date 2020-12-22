@@ -31,9 +31,9 @@
 								<tr>
                             </tbody>
                         </table>
-                        
+                         <br>
                         <br>
-                        <br>
+                     </div>                         
 
 					<div class="form-group text-center">
 						<button type="submit" class="btn btn-primary pull-right mr-3">Update</button>

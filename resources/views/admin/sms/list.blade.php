@@ -1,12 +1,12 @@
-@extends('layouts.main') @section('pageTitle', 'All SMS')
+@extends('layouts.main') @section('pageTitle', 'SMS History')
 
 @section('headerRight')
-<form class="form-inline ml-auto ng-pristine ng-valid" method="get" action="">
+<form class="form-inline auto-align" method="get" action="">
 
-    <div class="md-form my-0">
+    <div class="md-form auto-align">
         <input name="query" class="form-control form-control-sm" type="text" placeholder="Search here" aria-label="Search" value="{{request('query')}}">
     </div>
-    <button href="#" class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" type="submit"><i class="fa fa-search"></i></button>
+    <button href="#" class="btn btn-sm btn-primary auto-align" type="submit"><i class="fa fa-search"></i></button>
     <a class="btn btn-sm btn-primary btn-md my-0 ml-sm-2" href="{{url('admin/sms/send')}}"><i class="fas fa-plus"></i> Send</a>
 
 </form>
@@ -33,7 +33,7 @@
 						@foreach($data as $d)
 						<tr>
 							<td>{{ $d->id }}</td>
-							<td>{{ $d->phone }}</td>
+							<td>{{ strlen($d->phone)>11?substr($d->phone,0,10).'...':$d->phone }}</td>
 							<td>{{ $d->message }}</td>
 							<td>
 							@if($d->status)
@@ -49,7 +49,8 @@
 					</tbody>
 				</table>
 			</div>
-			<div class="card-footer"></div>
+            <div class="card-footer">{{ $data->appends(request()->all())->links('paginator') }}</div>
+
 		</div>
 	</div>
 </div>

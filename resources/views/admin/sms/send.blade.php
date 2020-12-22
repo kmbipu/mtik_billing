@@ -21,7 +21,7 @@
 						<label for="input_role_name">Message</label> 
 						<textarea name="message" class="form-control" placeholder="Enter message here" required></textarea>
 					</div>
-					
+					<br>
 					<button type="submit" class="btn btn-primary">Send</button>
 
 
@@ -53,7 +53,7 @@
 						<label for="input_role_name">Message</label> 
 						<textarea name="message" class="form-control" placeholder="Enter message here" required></textarea>
 					</div>
-					
+					<br>
 					<button type="submit" class="btn btn-primary">Send</button>
 
 

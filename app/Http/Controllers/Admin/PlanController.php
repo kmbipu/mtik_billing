@@ -22,9 +22,9 @@ class PlanController extends Controller
     public function list(){      
         $args = $this->filter();
         $query = request('query');
-        $data = $this->service->search($args, $query);
-        $resellers = (new UserService)->getResellers();
-        return view('admin.plan.list', array('data'=>$data,'resellers'=>$resellers));
+        $data = $this->service->search($args, $query, true);
+        $sellers = (new UserService)->getSellers();
+        return view('admin.plan.list', array('data'=>$data,'sellers'=>$sellers));
     }
 
     public function add(Request $request){
@@ -34,8 +34,8 @@ class PlanController extends Controller
         }
         $routers = RouterService::getAll();
         $bws = BandwidthService::getAll();        
-        $resellers = (new UserService())->getResellers();
-        return view('admin.plan.add',['routers'=>$routers,'bws'=>$bws,'resellers'=>$resellers]);
+        $sellers = (new UserService())->getSellers();
+        return view('admin.plan.add',['routers'=>$routers,'bws'=>$bws,'sellers'=>$sellers]);
     }
 
     public function edit(Request $request, $id){
@@ -47,9 +47,9 @@ class PlanController extends Controller
         $routers = RouterService::getAll();
         $pools = (new PoolService())->search(['router_id'=>$data->router_id]);
         $bws = BandwidthService::getAll();
-        $resellers = (new UserService())->getResellers();  
+        $sellers = (new UserService())->getSellers();
         if($data)     
-            return view('admin.plan.edit',['data'=>$data,'routers'=>$routers,'pools'=>$pools,'bws'=>$bws,'resellers'=>$resellers]);
+            return view('admin.plan.edit',['data'=>$data,'routers'=>$routers,'pools'=>$pools,'bws'=>$bws,'sellers'=>$sellers]);
         else
             abort(404, "Not found");
     }
@@ -59,8 +59,15 @@ class PlanController extends Controller
         return back();
     }
     
-    public function getByRouter($router_id) {        
-        $plans = $this->service->search(['router_id'=>$router_id,'reseller_id'=>null]);
+    public function getByRouter($router_id) {
+        if(request('user_id')){
+            $user = UserService::find(request('user_id'));
+            $created_by = $user->created_by;
+            $plans = $this->service->search(['router_id'=>$router_id,'seller_id'=>$created_by,'is_active'=>1]);
+        }
+        else{
+            $plans = $this->service->search(['router_id'=>$router_id,'is_active'=>1]);
+        }
         return $plans;
     }
 }

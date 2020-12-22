@@ -29,11 +29,14 @@ class UserService
         return User::get();
     }
     
-    public static function getOwnCustomers(){
+    public static function getCustomers($own=false){
         $role = Role::where('slug','customer')->first();
         $role_id = -1;
         if($role){$role_id= $role->id;}
-        return User::where(['created_by'=>Auth::user()->id,'role_id'=>$role_id])->get();
+        if($own)
+            return User::where(['created_by'=>Auth::user()->id,'role_id'=>$role_id])->get();
+        else 
+            return User::where(['role_id'=>$role_id])->get();
     }
 
     public function search($params=[], $str="", $is_paginate = false, $rows = 15){
@@ -45,6 +48,7 @@ class UserService
                 ->orWhere('username','like',$str.'%');;
             });
         }
+        $user = $user->orderBy('id','desc');
         if($is_paginate)
             $users = $user->paginate($rows);
         else
@@ -111,14 +115,14 @@ class UserService
         }
     }
     
-    public function getResellers(){
-        $role = Role::where('slug','reseller')->first();
-        if($role){
-            $role_id = $role->id;
-            $resellers = $this->model->where('role_id',$role_id)->get();
-            return $resellers;
-        }        
-        return [];
+    public function getSellers(){
+        $roles = Role::where('slug','!=', 'customer')->get();
+        $r_tmp = array();
+        foreach ($roles as $r){
+            $r_tmp[] = $r->id;
+        }
+        $resellers = $this->model->whereIn('role_id',$r_tmp)->get();
+        return $resellers;
     }    
 
     
@@ -134,7 +138,7 @@ class UserService
             return Validator::make($data, [
                 'name' => ['required', 'string', 'max:255'],
                 'username' => ['required', 'string', 'max:255'],
-                'password' => ['required', 'string', 'min:8', 'confirmed'],
+                'password' => ['required', 'string', 'min:4', 'confirmed'],
                 'role_id' => ['required', 'integer'],
                 'phone' => ['required', 'string', 'max:11'],
                 'address' => ['required', 'string', 'max:255'],
