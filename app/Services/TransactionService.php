@@ -132,6 +132,40 @@ class TransactionService
             return false;
         }
     }
+    
+    public function transfer($params) {
+        
+        $params['seller_id'] = Auth::user()->id;
+        $params['created_by'] = $params['seller_id'];
+        
+        try{
+            $this->model->create($params);
+            $user = UserService::find($params['user_id']);
+            $user->update(['balance'=>$user->balance + $params['amount']]);
+            Session::flash('success','Successfully transferred.');
+            return true;
+        }
+        catch (\Exception $e){
+            Helper::log($e->getMessage());
+            Session::flash('error', 'Unable transfer now.');
+            return false;
+        }
+    }
+    
+    public function prepareTransferReview()
+    {
+        $user = UserService::find(request('user_id'));
+
+        $tmp = array(
+            'name' => $user->name,
+            'user_id' => $user->id,
+            'username' => $user->username,
+        );
+        $post = request()->all();
+        $data = array_merge($tmp,$post);
+        
+        return (object) $data;
+    }
 
 
     protected function validator(array $data){   

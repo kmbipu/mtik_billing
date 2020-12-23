@@ -42,7 +42,7 @@
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
 
 				<a class="dropdown-item" href="#">                  
-                  <strong>Logged as {{ucwords(Auth::user()->role->name)}}</strong>
+                  <strong>{{ucwords(Auth::user()->role->name)}}</strong>
                 </a>
                 
                 <div class="dropdown-divider"></div>

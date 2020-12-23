@@ -19,9 +19,7 @@
 @endsection
 
 @section('content')
-@php
-$admin = \app\Services\Helper::isAdmin();
-@endphp
+@php $admin = \app\Services\Helper::isAdmin(); @endphp
 <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
 <div class="row">
     <div class="col-lg-12 mb-4">

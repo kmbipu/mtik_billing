@@ -37,19 +37,39 @@ class TransactionController extends Controller
     }
     
     public function edit(Request $request, $id){
+        $data = $this->service->find($id);
+        if($data==null)
+            return back();
+        
         if($request->method()=='POST'){
             $this->service->update(['id'=>$id], $this->filter($request->all()));
             return back();
         }
-        $data = $this->service->find($id);
-        if($data)
-            return view('admin.transaction.edit',['data'=>$data]);
-        else
-            abort(404, "Not found");
+        return view('admin.transaction.edit',['data'=>$data]);
+ 
     }
     
     public function delete($id){
         $this->service->delete($id);
         return back();
     }
+    
+    public function transfer(Request $request) {
+        if($request->method()=='POST'){
+            $action = $request->action;
+            
+            if($action=='review'){
+                $data = $this->service->prepareTransferReview();
+                return view('admin.transaction.transfer_review',['data'=>$data]);
+            }
+            else if($action=='transfer'){
+                $this->service->transfer($this->filter());
+                return redirect('/admin/prepaids/transfer');
+            }
+        }
+        
+        $resellers = (new UserService())->getSellers(true);
+        return view('admin.transaction.transfer', ['resellers'=>$resellers]);
+    }
+    
 }

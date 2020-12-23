@@ -2,9 +2,7 @@
 @section('pageTitle', 'All PPPoe Users')
 
 @section('headerRight')
-@php
-$admin = \app\Services\Helper::isAdmin();
-@endphp
+@php $admin = \app\Services\Helper::isAdmin(); @endphp
 <form class="form-inline" method="get" action="">
 	@if($admin)
 	<div class="md-form my-0 mr-2">

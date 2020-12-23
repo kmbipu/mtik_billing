@@ -9,6 +9,7 @@ use App\Services\PlanService;
 use App\Services\PoolService;
 use App\Services\RouterService;
 use App\Services\UserService;
+use App\Services\Helper;
 
 class PlanController extends Controller
 {
@@ -21,6 +22,9 @@ class PlanController extends Controller
 
     public function list(){      
         $args = $this->filter();
+        if($u=Helper::isReseller()){
+            $args['seller_id'] = $u->id;
+        }
         $query = request('query');
         $data = $this->service->search($args, $query, true);
         $sellers = (new UserService)->getSellers();

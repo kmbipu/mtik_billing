@@ -2,8 +2,11 @@
 @section('pageTitle', 'All Customers')
 
 @section('headerRight')
+
+@php $admin = \app\Services\Helper::isAdmin(); @endphp
+
 <form class="form-inline " method="get" action="">
-	@if(\app\Services\Helper::isAdmin())
+	@if($admin)
 	<div class="md-form auto-align">
         <input name="created_by" class="form-control form-control-sm" type="text" placeholder="Seller ID" aria-label="Search" value="{{request('created_by')}}">
     </div>

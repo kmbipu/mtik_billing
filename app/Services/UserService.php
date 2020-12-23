@@ -115,8 +115,13 @@ class UserService
         }
     }
     
-    public function getSellers(){
-        $roles = Role::where('name','!=', 'customer')->get();
+    public function getSellers($all=false){
+        if($all){
+            $roles = Role::where('name','reseller')->get();
+        }
+        else{
+            $roles = Role::where('name','!=', 'customer')->get();
+        }
         $r_tmp = array();
         foreach ($roles as $r){
             $r_tmp[] = $r->id;

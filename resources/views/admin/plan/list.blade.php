@@ -2,7 +2,9 @@
 @section('pageTitle', 'All Plans')
 
 @section('headerRight')
+@php $admin = \app\Services\Helper::isAdmin(); @endphp
 <form class="form-inline" method="get" action="">
+	@if($admin)
 	<div class="md-form auto-align">
         <select id="User Type" name="seller_id" class="form-control form-control-sm">
             <option value="">Select Seller</option>
@@ -11,6 +13,7 @@
             @endforeach
         </select>
     </div>
+    @endif
     <div class="md-form auto-align">
         <input name="query" class="form-control form-control-sm" type="text" placeholder="Search name" aria-label="Search" value="{{request('query')}}">
     </div>
@@ -32,10 +35,12 @@
                     <th>Name</th>                    
                     <th>Bandwidth</th>
                     <th>Price</th>
-                    <th>Validity</th>
+                    <th>Discount</th>
+                    @if($admin)
                     <th>Seller</th>
                     <th>Display</th>
                     <th>Action</th>
+                    @endif
                     </tr>
                 </thead>
                 <tbody>
@@ -45,13 +50,15 @@
                     <td style="color:{{$d->is_active?'':'red'}}">{{ $d->name }}</td> 
                     <td>{{ $d->bandwidth->name }}</td>
                     <td>{{ $d->price }}</td>
-                    <td>{{ $d->validity.' '.$d->validity_unit }}</td>
+                    <td>{{ $d->discount }}</td>
+                    @if($admin)
                     <td>{{ $d->seller_id }}</td> 
                     <td>{{ $d->is_display }}</td> 
                     <td>
                         <a href="{{ url("/admin/plans/edit").'/'.$d->id }}" class="btn btn-sm btn-warning">Edit</a> 
                         <a d_id="{{$d->id}}" d_action="{{url('/admin/plans/delete/'.$d->id)}}" href="#" class="btn btn-sm btn-danger delete-action-btn">Delete</a>
                     </td>
+                    @endif
                     </tr>
                     @endforeach
                 </tbody>

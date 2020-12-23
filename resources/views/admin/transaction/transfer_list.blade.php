@@ -34,7 +34,6 @@
                     <td>{{ $d->id }}</td>
                     <td>{{ $d->created_at->format('Y-m-d') }}</td> 
                     <td>{{ $d->username }}</td> 
-                    <td>{{ $d->plan_name }}</td> 
                     <td>{{ $d->amount }}</td>  
                     <td>{{ $d->p_method }}</td>                                     
                     @if($d->status=='complete')

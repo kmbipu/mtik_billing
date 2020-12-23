@@ -87,6 +87,7 @@ Route::middleware(['auth','role'])->group(function () {
         Route::match(['get', 'post'], '/prepaids/recharge', [App\Http\Controllers\Admin\PrepaidController::class, 'recharge'])->name('admin.prepaids.recharge');
         Route::match(['get', 'post'], '/prepaids/renew/{id}', [App\Http\Controllers\Admin\PrepaidController::class, 'renew'])->name('admin.prepaids.renew');
         Route::post('/prepaids/delete/{id}', [App\Http\Controllers\Admin\PrepaidController::class, 'delete'])->name('admin.prepaids.delete');
+        Route::match(['get', 'post'], '/prepaids/transfer', [App\Http\Controllers\TransactionController::class, 'transfer'])->name('admin.prepaids.transfer');
         
         //Transactions
         Route::get('/transactions/recharges', [App\Http\Controllers\TransactionController::class, 'rechargeList'])->name('admin.transactions.recharges.list');

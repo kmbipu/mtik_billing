@@ -17,10 +17,10 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('username',100);
-            $table->string('plan_name',100);
+            $table->string('plan_name',100)->nullable();
             $table->integer('amount');
-            $table->date('start_dt');
-            $table->date('expire_dt');
+            $table->date('start_dt')->nullable();
+            $table->date('expire_dt')->nullable();
             $table->string('status',50); //pending/complete
             $table->string('type',100); //recharge, transfer(plus or minus amount), commission
             $table->string('p_method',100); //auto_bkash, manual_bkash, cash

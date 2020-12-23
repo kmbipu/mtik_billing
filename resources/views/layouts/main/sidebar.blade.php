@@ -199,6 +199,19 @@
         </div>
       </li>
       
+      <li class="nav-item {{ checkIfActive('admin.plans') }}">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePlans" aria-expanded="false" aria-controls="collapseBootstrap">
+          <i class="fas fa-server"></i>
+          <span>Plans</span>
+        </a>
+        <div id="collapsePlans" class="collapse {{ checkIfShow('admin.plans') }}" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar" style="">
+          <div class="bg-white py-2 collapse-inner rounded">
+            <h6 class="collapse-header">Plans</h6>
+            <a class="collapse-item {{ checkIfActive('admin.plans.list') }}" href="{{ url("admin/plans") }}">View All</a>
+          </div>
+        </div>
+      </li>
+      
       @else
       
       
