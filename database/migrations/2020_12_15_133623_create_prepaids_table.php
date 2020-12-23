@@ -25,15 +25,15 @@ class CreatePrepaidsTable extends Migration
             $table->foreign('user_id')
             ->references('id')
             ->on('users')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
             $table->foreign('router_id')
             ->references('id')
             ->on('routers')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
             $table->foreign('plan_id')
             ->references('id')
             ->on('plans')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
         });
     }
 

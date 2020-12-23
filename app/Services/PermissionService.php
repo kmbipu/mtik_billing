@@ -39,9 +39,14 @@ class PermissionService
                 //Nothing to do
             }
             else{
-                $permission = new Permission();     
-                $permission->name = $name;
-                $permission->save();
+                try{
+                    $permission = new Permission();     
+                    $permission->name = $name;
+                    $permission->save();
+                }
+                catch(\Exception $e){
+                    
+                }
             }
         } 
     

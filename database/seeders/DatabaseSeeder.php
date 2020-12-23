@@ -14,10 +14,10 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $role = array(
-            'name'=>'Administrator',
-            'slug'=>'admin',
-        );
+        $role1 = ['name'=>'admin','prefix'=>'admin'];
+        $role2 = ['name'=>'reseller', 'prefix'=>'admin'];
+        $role3 = ['name'=>'customer','prefix'=>'customer'];
+        
         $user = array(
             'name'=>'System Admin',
             'username'=>'admin',
@@ -29,8 +29,10 @@ class DatabaseSeeder extends Seeder
             'nid'=>'789456123',
             'created_by'=>0
         );
-        \App\Models\Role::create($role);
-
+        \App\Models\Role::create($role1);
+        \App\Models\Role::create($role2);
+        \App\Models\Role::create($role3);
+        
         \App\Models\User::create($user);
     }
 }

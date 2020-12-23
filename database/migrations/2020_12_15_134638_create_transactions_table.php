@@ -32,11 +32,11 @@ class CreateTransactionsTable extends Migration
             $table->foreign('user_id')
             ->references('id')
             ->on('users')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
             $table->foreign('created_by')
             ->references('id')
             ->on('users')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
         });
     }
 

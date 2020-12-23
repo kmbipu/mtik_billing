@@ -2,7 +2,11 @@
 @section('pageTitle', 'All PPPoe Users')
 
 @section('headerRight')
+@php
+$admin = \app\Services\Helper::isAdmin();
+@endphp
 <form class="form-inline" method="get" action="">
+	@if($admin)
 	<div class="md-form my-0 mr-2">
         <select id="User Type" name="created_by" class="form-control form-control-sm">
             <option value="">Select Seller</option>
@@ -11,6 +15,7 @@
             @endforeach
         </select>
     </div>
+    @endif
     <div class="md-form auto-align">
         <select id="User Type" name="plan_id" class="form-control form-control-sm">
             <option value="">All Plans</option>
@@ -52,9 +57,12 @@
                     <td style="color:{{date('Y-m-d') > $d->expire_dt?'red':''}}">{{ $d->expire_dt }}</td>
                     <td>{{ $d->created_by }}</td>                    
                     <td>
+                    	<a href="{{ url("/admin/prepaids/renew").'/'.$d->id }}" class="btn btn-sm btn-info">Renew</a>
+                    	
+                    	@if($admin)
                          <a href="{{ url("/admin/prepaids/edit").'/'.$d->id }}" class="btn btn-sm btn-warning">Edit</a>
-                         <a href="{{ url("/admin/prepaids/renew").'/'.$d->id }}" class="btn btn-sm btn-info">Renew</a>
-                        <a d_id="{{$d->id}}" d_action="{{url('/admin/prepaids/delete/'.$d->id)}}" href="#" class="btn btn-sm btn-danger delete-action-btn">Delete</a>
+                         <a d_id="{{$d->id}}" d_action="{{url('/admin/prepaids/delete/'.$d->id)}}" href="#" class="btn btn-sm btn-danger delete-action-btn">Delete</a>
+                    	@endif
                     </td>
                     </tr>
                     @endforeach

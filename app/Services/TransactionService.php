@@ -47,21 +47,22 @@ class TransactionService
         return $records;
     }
     
-    public function custom_search($start_date, $end_date, $seller_id, $str){
+    public function custom_search($params){
         
         $record =  $this->model->where([]);
         
-        if($seller_id)
-            $record =  $record->where(['seller_id'=>$seller_id]);
+        if(isset($params['seller_id']))
+            $record =  $record->where(['seller_id'=>$params['seller_id']]);
     
-        if($start_date && $end_date){
-            $start_date = $start_date.' 00:00:00';
-            $end_date = $end_date.' 23:59:59';
+        if(isset($params['start_date']) && isset($params['end_date'])){
+            $start_date = $params['start_date'].' 00:00:00';
+            $end_date = $params['end_date'].' 23:59:59';
             $record = $record->where('created_at','>=', $start_date)->where('created_at','<=',$end_date);
         }
         
         
-        if($str){
+        if(isset($params['query'])){
+            $str = $params['query'];
             $record = $record->where(function($query) use ($str) {
                 $query->orWhere('username','like',$str.'%')
                 ->orWhere('id','like',$str.'%');
@@ -83,25 +84,24 @@ class TransactionService
         $validator = $this->validator($params);
         if ($validator->passes()) {           
             try{
-                $params['created_by'] = Auth::user()->id;
-                $params['seller_id'] = UserService::find($params['user_id'])->created_by;
+                $params['created_by'] = Auth::user()->id;                
                 $this->model->create($params);
                 return true;
             }
             catch (\Exception $e){
                 Helper::log($e->getMessage());
-                $error = "Unable to create transaction.";
-                if($call){
-                    throw new Exception('$error');
-                }
-                else{
-                    Session::flash('error', $error);
-                    return false;
-                } 
+                $error = "Unable to create transaction.";                
+                if($call)
+                    throw new Exception($error);             
+                Session::flash('error', $error);
+                return false;
+                
             }
         }
-        else{
+        else{            
             $error = Helper::errorToString($validator->errors()->all());
+            if($call)
+                throw new Exception($error);
             Session::flash('error',$error);            
             return false;
         }

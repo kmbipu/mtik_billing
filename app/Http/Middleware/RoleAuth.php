@@ -20,8 +20,10 @@ class RoleAuth
     public function handle(Request $request, Closure $next)
     {        
         try {
+            return $next($request);
+            
             $user = Auth::user();
-            if($user->role->slug=='admin')
+            if($user->role->name=='admin')
                 return $next($request);
                 
             $req_name = $request->route()->getName();

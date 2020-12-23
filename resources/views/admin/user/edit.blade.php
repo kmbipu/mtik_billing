@@ -49,7 +49,7 @@
                     <br>
                     <div class="form-group text-center">
                       <button type="submit" class="btn btn-primary pull-right mr-3">Update</button>
-                      <a href="{{url('admin/users/'.$slug.'s')}}" class="btn btn-default pull-right">Back</a>
+                      <a href="{{url('admin/users/'.$role->name.'s')}}" class="btn btn-default pull-right">Back</a>
                     </div>
                     
               </div>        

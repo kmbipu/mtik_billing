@@ -117,8 +117,8 @@ class SmsService
             $rs = new RoleService();
             $gs = new GatewayService();
             
-            $cus_role = $rs->search(['slug'=>'customer'])->first()->id;
-            $res_role = $rs->search(['slug'=>'reseller'])->first()->id;
+            $cus_role = $rs->search(['name'=>'customer'])->first()->id;
+            $res_role = $rs->search(['name'=>'reseller'])->first()->id;
             
             $my_id = Auth::user()->id;
             

@@ -30,15 +30,15 @@ class CreatePlansTable extends Migration
             $table->foreign('router_id')
             ->references('id')
             ->on('routers')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
             $table->foreign('pool_id')
             ->references('id')
             ->on('pools')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
             $table->foreign('bandwidth_id')
             ->references('id')
             ->on('bandwidths')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
         });
     }
 

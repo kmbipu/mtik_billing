@@ -20,12 +20,11 @@
 					</div>
 					<div class="form-group">
 							
-						<label for="exampleFormControlSelect1">Role Type</label>
-                        <select class="form-control"  name="slug" required>
-                        <option value="">Select Type</option>
-                        <option value="admin" {{ $role->slug=='admin'?'selected':'' }}>Admin</option>
-                        <option value="reseller" {{ $role->slug=='reseller'?'selected':'' }}>Reseller</option>
-                        <option value="customer" {{ $role->slug=='customer'?'selected':'' }}>Customer</option>
+						<label for="exampleFormControlSelect1">Prefix</label>
+                        <select class="form-control"  name="prefix" required>
+                        <option value="">Select Prefix</option>
+                        <option value="admin" {{ $role->prefix=='admin'?'selected':'' }}>Admin</option>
+                        <option value="customer" {{ $role->prefix=='customer'?'selected':'' }}>Customer</option>
                         </select>
 					</div>
 					

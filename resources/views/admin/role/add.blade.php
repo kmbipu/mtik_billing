@@ -17,11 +17,10 @@
 						<input name="name"	type="text" class="form-control" placeholder="Enter a role name" required>
 					</div>
 					<div class="form-group">
-						<label for="exampleFormControlSelect1">Role Type</label>
-                        <select class="form-control"  name="slug" required>
-                        <option value="">Select Type</option>
+						<label for="exampleFormControlSelect1">Prefix</label>
+                        <select class="form-control"  name="prefix" required>
+                        <option value="">Select Prefix</option>
                         <option value="admin">Admin</option>
-                        <option value="reseller">Reseller</option>
                         <option value="customer">Customer</option>
                         </select>					
 					</div>

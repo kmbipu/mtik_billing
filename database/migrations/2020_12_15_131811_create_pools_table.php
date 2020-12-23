@@ -22,7 +22,7 @@ class CreatePoolsTable extends Migration
             $table->foreign('router_id')
             ->references('id')
             ->on('routers')
-            ->onDelete('cascade');
+            ->onDelete('restrict');
         });
     }
 

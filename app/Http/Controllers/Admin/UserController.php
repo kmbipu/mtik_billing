@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\UserService;
 use App\Services\RoleService;
+use Auth;
+use App\Services\Helper;
 
 class UserController extends Controller
 {
@@ -19,7 +21,11 @@ class UserController extends Controller
     public function customerList(){
         $args = $this->filter();
         $rs = new RoleService();
-        $args['role_id'] = $rs->search(['slug'=>'customer'])->first()->id;
+        $args['role_id'] = $rs->search(['name'=>'customer'])->first()->id;
+
+        if($user=Helper::isReseller())
+            $args['created_by'] = $user->id;
+        
         $query = request('query');
         $users = $this->service->search($args,$query,true);
         return view('admin.user.customer_list', array('users'=>$users));
@@ -29,7 +35,7 @@ class UserController extends Controller
         $args = $this->filter();
         $rs = new RoleService();
         $rs = new RoleService();
-        $args['role_id'] = $rs->search(['slug'=>'reseller'])->first()->id;
+        $args['role_id'] = $rs->search(['name'=>'reseller'])->first()->id;
         $query = request('query');
         $users = $this->service->search($args,$query,true);
         $roles = RoleService::getAll();
@@ -42,7 +48,7 @@ class UserController extends Controller
                 return back();            
         }
         $rs = new RoleService();
-        $role = $rs->search(['slug'=>'customer'])->first();
+        $role = $rs->search(['name'=>'customer'])->first();
         return view('admin.user.add_customer',array('role'=>$role));
     }
     
@@ -52,26 +58,37 @@ class UserController extends Controller
                 return back();
         }
         $rs = new RoleService();
-        $role = $rs->search(['slug'=>'reseller'])->first();
+        $role = $rs->search(['name'=>'reseller'])->first();
         return view('admin.user.add_reseller',array('role'=>$role));
     }
 
-    public function edit(Request $request, $id){
+    public function edit(Request $request, $id){        
+        if(Helper::isAdmin())
+            $user = $this->service->find($id);
+        elseif($u=Helper::isReseller())
+            $user = $this->service->search(['id'=>$id,'created_by'=>$u->id])->first();
+        
+        if($user==null)
+            return back();
+        
         if($request->method()=='POST'){
             $this->service->update(['id'=>$id], $this->filter($request->all()));
             return back();
         } 
-        $user = $this->service->find($id);
-        $slug = RoleService::find($user->role_id)->slug;
-        if($user)     
-            return view('admin.user.edit', array('user'=>$user,'slug'=>$slug));
-        else
-            abort(404, "Not found");
+        
+        $role = RoleService::find($user->role_id);
+        return view('admin.user.edit', array('user'=>$user,'role'=>$role));
     }
 
 
     public function delete($id){
-        $this->service->delete($id);
+        if(Helper::isAdmin())
+            $this->service->delete($id);
+        elseif($u=Helper::isReseller()){
+            $user = $this->service->search(['id'=>$id,'created_by'=>$u->id])->first();
+            if($user)
+                $this->service->delete($id);            
+        }
         return back();
     }
 }

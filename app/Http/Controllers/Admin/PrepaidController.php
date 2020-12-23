@@ -9,6 +9,7 @@ use App\Services\PoolService;
 use App\Services\RouterService;
 use App\Services\UserService;
 use App\Services\PlanService;
+use App\Services\Helper;
 
 class PrepaidController extends Controller
 {
@@ -22,10 +23,17 @@ class PrepaidController extends Controller
     
     public function list(){
         $args = $this->filter();
+        if($u=Helper::isReseller()){
+            $args['created_by'] = $u->id;
+            $plans = (new PlanService())->search(['seller_id'=>$u->id]);
+        }
+        else {
+            $plans = PlanService::getAll();
+        }
+        
         $query = request('query');
         $data = $this->service->search($args, $query, true);
-        $sellers = (new UserService)->getSellers();
-        $plans = PlanService::getAll();
+        $sellers = (new UserService)->getSellers();        
         return view('admin.prepaid.list', array('data'=>$data,'sellers'=>$sellers,'plans'=>$plans));
     }
     
@@ -45,8 +53,11 @@ class PrepaidController extends Controller
                 return back();
             }
         }
+        if($u=Helper::isReseller())
+            $users = UserService::getCustomers(true);
+        else
+            $users = UserService::getCustomers();
         
-        $users = UserService::getCustomers();
         $routers = RouterService::getAll();
         return view('admin.prepaid.recharge',['users'=>$users,'routers'=>$routers]);
     }

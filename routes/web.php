@@ -89,12 +89,12 @@ Route::middleware(['auth','role'])->group(function () {
         Route::post('/prepaids/delete/{id}', [App\Http\Controllers\Admin\PrepaidController::class, 'delete'])->name('admin.prepaids.delete');
         
         //Transactions
-        Route::get('/transactions/recharges', [App\Http\Controllers\Admin\TransactionController::class, 'rechargeList'])->name('admin.transactions.recharges.list');
-        Route::get('/transactions/transfers', [App\Http\Controllers\Admin\TransactionController::class, 'transferList'])->name('admin.transactions.transfers.list');
+        Route::get('/transactions/recharges', [App\Http\Controllers\TransactionController::class, 'rechargeList'])->name('admin.transactions.recharges.list');
+        Route::get('/transactions/transfers', [App\Http\Controllers\TransactionController::class, 'transferList'])->name('admin.transactions.transfers.list');
         
-        Route::match(['get', 'post'], '/transactions/edit/{id}', [App\Http\Controllers\Admin\TransactionController::class, 'edit'])->name('admin.transactions.edit');
-        Route::match(['get', 'post'], '/transactions/edit/{id}', [App\Http\Controllers\Admin\TransactionController::class, 'edit'])->name('admin.transactions.edit');
-        Route::post('/transactions/delete/{id}', [App\Http\Controllers\Admin\TransactionController::class, 'delete'])->name('admin.transactions.delete');
+        Route::match(['get', 'post'], '/transactions/edit/{id}', [App\Http\Controllers\TransactionController::class, 'edit'])->name('admin.transactions.edit');
+        Route::match(['get', 'post'], '/transactions/edit/{id}', [App\Http\Controllers\TransactionController::class, 'edit'])->name('admin.transactions.edit');
+        Route::post('/transactions/delete/{id}', [App\Http\Controllers\TransactionController::class, 'delete'])->name('admin.transactions.delete');
         
         //SMS
         Route::get('/sms', [App\Http\Controllers\Admin\SmsController::class, 'list'])->name('admin.sms.list');
@@ -102,5 +102,6 @@ Route::middleware(['auth','role'])->group(function () {
         Route::match(['get', 'post'], '/sms/setting', [App\Http\Controllers\Admin\SmsController::class, 'setting'])->name('admin.sms.setting');
         
     });
+
     
 });

@@ -30,7 +30,7 @@ class UserService
     }
     
     public static function getCustomers($own=false){
-        $role = Role::where('slug','customer')->first();
+        $role = Role::where('name','customer')->first();
         $role_id = -1;
         if($role){$role_id= $role->id;}
         if($own)
@@ -116,7 +116,7 @@ class UserService
     }
     
     public function getSellers(){
-        $roles = Role::where('slug','!=', 'customer')->get();
+        $roles = Role::where('name','!=', 'customer')->get();
         $r_tmp = array();
         foreach ($roles as $r){
             $r_tmp[] = $r->id;
@@ -127,10 +127,10 @@ class UserService
 
     
     public function getResellerUsers($r_id){
-        $role = Role::where('slug','customer')->first();
+        $role = Role::where('name','customer')->first();
         $role_id = -1;
         if($role){$role_id= $role->id;}
-        return $this->model->where(['reseller_id'=>$r_id,'role_id'=>$role_id])->get();
+        return $this->model->where(['created_by'=>$r_id,'role_id'=>$role_id])->get();
     }
 
     protected function validator(array $data, $update=false){

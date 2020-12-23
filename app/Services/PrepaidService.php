@@ -176,7 +176,8 @@ class PrepaidService
                 'status' => $params['trans']['status'],
                 'type' => $params['trans']['type'],
                 'p_method' => $params['trans']['method'],
-                'p_trxid' => $params['trans']['trxid']
+                'p_trxid' => $params['trans']['trxid'],
+                'seller_id' => $plan->seller_id
             );
 
             $ts = new TransactionService();
@@ -224,6 +225,7 @@ class PrepaidService
                 'type' => $params['trans']['type'],
                 'p_method' => $params['trans']['method'],
                 'p_trxid' => $params['trans']['trxid'],
+                'seller_id' => $plan->seller_id
             );
             $ts = new TransactionService();
             $ts->insert($trans,true);
@@ -256,7 +258,7 @@ class PrepaidService
             'router_id' => $plan->router_id,
             'plan_id' => $plan_id,
             'plan_name' => $plan->name,
-            'reseller_id' => $plan->reseller_id,
+            'seller_id' => $plan->seller_id,
             'price' => $plan->price,
             'start_dt' => $start_dt,
             'expire_dt' => $expire_dt
@@ -287,7 +289,7 @@ class PrepaidService
             'router_id' => $plan->router_id,
             'plan_id' => $prepaid->plan_id,
             'plan_name' => $plan->name,
-            'reseller_id' => $plan->reseller_id,
+            'seller_id' => $plan->seller_id,
             'price' => $plan->price,
             'start_dt' => $prepaid->start_dt,
             'expire_dt' => $expire_dt

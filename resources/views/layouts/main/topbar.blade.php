@@ -13,7 +13,7 @@
               </a>
               <div class="dropdown-menu dropdown-menu-right p-3 shadow animated--grow-in"
                 aria-labelledby="searchDropdown">
-                <form class="navbar-search" method="get" action="{{url('admin/users')}}">
+
                   <div class="input-group">
                     <input name="query" type="text" class="form-control bg-light border-1 small" placeholder="Search users.."
                       aria-label="Search" aria-describedby="basic-addon2" style="border-color: #3f51b5;">
@@ -23,7 +23,7 @@
                       </button>
                     </div>
                   </div>
-                </form>
+                
               </div>
             </li>
             <div class="topbar-divider d-none d-sm-block helpline-div"></div>
@@ -41,6 +41,12 @@
               </a>
               <div class="dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="userDropdown">
 
+				<a class="dropdown-item" href="#">                  
+                  <strong>Logged as {{ucwords(Auth::user()->role->name)}}</strong>
+                </a>
+                
+                <div class="dropdown-divider"></div>
+                
                 <a class="dropdown-item" href="#">
                   <i class="fas fa-info fa-sm fa-fw mr-2 text-gray-400"></i>
                   ID - {{Auth::user()->id}}

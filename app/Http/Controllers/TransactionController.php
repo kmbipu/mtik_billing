@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers\Admin;
+namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\TransactionService;
 use App\Services\UserService;
+use App\Services\Helper;
 
 class TransactionController extends Controller
 {
@@ -18,9 +19,12 @@ class TransactionController extends Controller
     
     public function rechargeList(Request $request){
         $args = $this->filter();
-        $query = request('query');
+        if($u=Helper::isReseller()){
+            $args['seller_id'] = $u->id;
+        }
+
         $args['type'] = 'recharge';
-        $data = $this->service->custom_search($request->start_date, $request->end_date, $request->seller_id, $request->query_str);
+        $data = $this->service->custom_search($args);
         return view('admin.transaction.recharge_list', $data);
     }
     

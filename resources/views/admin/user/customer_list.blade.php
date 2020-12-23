@@ -3,9 +3,11 @@
 
 @section('headerRight')
 <form class="form-inline " method="get" action="">
+	@if(\app\Services\Helper::isAdmin())
 	<div class="md-form auto-align">
-        <input name="created_by" class="form-control form-control-sm" type="text" placeholder="Created By ID" aria-label="Search" value="{{request('created_by')}}">
+        <input name="created_by" class="form-control form-control-sm" type="text" placeholder="Seller ID" aria-label="Search" value="{{request('created_by')}}">
     </div>
+    @endif
     <div class="md-form auto-align">
         <input name="query" class="form-control form-control-sm" type="text" placeholder="Search name, user, phone" aria-label="Search" value="{{request('query')}}">
     </div>
