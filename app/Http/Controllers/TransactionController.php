@@ -17,24 +17,12 @@ class TransactionController extends Controller
         $this->service = new TransactionService();
     }
     
-    public function rechargeList(Request $request){
-        $args = $this->filter();
-        if($u=Helper::isReseller()){
-            $args['seller_id'] = $u->id;
-        }
-
-        $args['type'] = 'recharge';
-        $data = $this->service->custom_search($args);
-        return view('admin.transaction.recharge_list', $data);
+    public function list(Request $request){        
+        $args = $this->filter();        
+        $data = $this->service->custom_search($args, request('query'), request('start_date'), request('end_date'));
+        return view('admin.transaction.list', $data);
     }
     
-    public function transferList(){
-        $args = $this->filter();
-        $query = request('query');
-        $args['type'] = 'transfer';
-        $data = $this->service->search($args, $query);
-        return view('admin.transaction.transfer_list', array('data'=>$data));
-    }
     
     public function edit(Request $request, $id){
         $data = $this->service->find($id);

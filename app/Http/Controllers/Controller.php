@@ -18,6 +18,8 @@ class Controller extends BaseController
         unset($params['query']);
         unset($params['page']);
         unset($params['_token']);
+        unset($params['start_date']);
+        unset($params['end_date']);
         foreach ($params as $k => $v)
         {
             if(!isset($params[$k]))

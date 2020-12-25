@@ -90,10 +90,7 @@ Route::middleware(['auth','role'])->group(function () {
         Route::match(['get', 'post'], '/prepaids/transfer', [App\Http\Controllers\TransactionController::class, 'transfer'])->name('admin.prepaids.transfer');
         
         //Transactions
-        Route::get('/transactions/recharges', [App\Http\Controllers\TransactionController::class, 'rechargeList'])->name('admin.transactions.recharges.list');
-        Route::get('/transactions/transfers', [App\Http\Controllers\TransactionController::class, 'transferList'])->name('admin.transactions.transfers.list');
-        
-        Route::match(['get', 'post'], '/transactions/edit/{id}', [App\Http\Controllers\TransactionController::class, 'edit'])->name('admin.transactions.edit');
+        Route::get('/transactions', [App\Http\Controllers\TransactionController::class, 'list'])->name('admin.transactions.list');
         Route::match(['get', 'post'], '/transactions/edit/{id}', [App\Http\Controllers\TransactionController::class, 'edit'])->name('admin.transactions.edit');
         Route::post('/transactions/delete/{id}', [App\Http\Controllers\TransactionController::class, 'delete'])->name('admin.transactions.delete');
         

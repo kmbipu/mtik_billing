@@ -153,11 +153,20 @@ class PrepaidService
         try {
             DB::beginTransaction();
             
-            
             $user_id = $params['prepaid']['user_id'];
             $prepaid = $this->model->where(['user_id'=>$user_id])->first();
             $plan = PlanService::find($params['prepaid']['plan_id']);
             $user = UserService::find($user_id);
+            
+            if($u = Helper::isReseller()){
+                if($u->balance < $plan->price){
+                    Session::flash('error', 'Insufficient balance.');
+                    return false;
+                }
+                else{
+                    $u->update(['balance'=>$u->balance - $plan->price]);
+                }
+            }
             
             $params['prepaid']['username'] = $user->username;
             $params['prepaid']['password'] = $user->secret;
@@ -177,7 +186,8 @@ class PrepaidService
                 'type' => $params['trans']['type'],
                 'p_method' => $params['trans']['method'],
                 'p_trxid' => $params['trans']['trxid'],
-                'seller_id' => $plan->seller_id
+                'seller_id' => $plan->seller_id,
+                'discount' =>$plan->discount
             );
 
             $ts = new TransactionService();
@@ -204,6 +214,18 @@ class PrepaidService
             $plan = PlanService::find($params['prepaid']['plan_id']);
             $user = UserService::find($user_id);
             
+            
+            
+            if($u = Helper::isReseller()){
+                if($u->balance < $plan->price){
+                    Session::flash('error', 'Insufficient balance.');
+                    return false;
+                }
+                else{
+                    $u->update(['balance'=>$u->balance - $plan->price]);
+                }
+            }
+            
             $params['prepaid']['username'] = $user->username;
             $params['prepaid']['password'] = $user->secret;
             $params['prepaid']['plan_name'] = $plan->name;
@@ -225,7 +247,8 @@ class PrepaidService
                 'type' => $params['trans']['type'],
                 'p_method' => $params['trans']['method'],
                 'p_trxid' => $params['trans']['trxid'],
-                'seller_id' => $plan->seller_id
+                'seller_id' => $plan->seller_id,
+                'discount' =>$plan->discount
             );
             $ts = new TransactionService();
             $ts->insert($trans,true);
@@ -244,10 +267,10 @@ class PrepaidService
     }
 
     public function prepareRechargeReview($user_id, $plan_id)
-    {
+    {        
         $user = UserService::find($user_id);
-        $plan = PlanService::find($plan_id);        
-               
+        $plan = PlanService::find($plan_id); 
+              
         $start_dt = date("Y-m-d");
         $expire_dt = date("Y-m-d", strtotime($start_dt . " + $plan->validity $plan->validity_unit"));
     

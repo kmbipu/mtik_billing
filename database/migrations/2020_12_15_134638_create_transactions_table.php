@@ -17,7 +17,7 @@ class CreateTransactionsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->string('username',100);
-            $table->string('plan_name',100)->nullable();
+            $table->string('plan_name', 255);
             $table->integer('amount');
             $table->date('start_dt')->nullable();
             $table->date('expire_dt')->nullable();

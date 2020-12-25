@@ -47,32 +47,42 @@ class TransactionService
         return $records;
     }
     
-    public function custom_search($params){
-        
-        $record =  $this->model->where([]);
-        
+    public function custom_search($params, $str, $start_date, $end_date){
+        $record =  $this->model->where($params);
+
+        if($u=Helper::isReseller()){
+            $q = ['user_id'=>$u->id, 'seller_id'=>$u->id];
+            $record = $record->where(function($query) use ($q) {
+                $query->orWhere($q);
+            });
+        }
+
         if(isset($params['seller_id']))
             $record =  $record->where(['seller_id'=>$params['seller_id']]);
     
-        if(isset($params['start_date']) && isset($params['end_date'])){
-            $start_date = $params['start_date'].' 00:00:00';
-            $end_date = $params['end_date'].' 23:59:59';
-            $record = $record->where('created_at','>=', $start_date)->where('created_at','<=',$end_date);
+        if($start_date && $end_date){
+            $start = $params['start_date'].' 00:00:00';
+            $end = $end_date.' 23:59:59';
+            $record = $record->where('created_at','>=', $start)->where('created_at','<=',$end);
         }
         
         
-        if(isset($params['query'])){
-            $str = $params['query'];
+        if($str){
             $record = $record->where(function($query) use ($str) {
                 $query->orWhere('username','like',$str.'%')
-                ->orWhere('id','like',$str.'%');
+                ->orWhere('id','like',$str.'%')
+                ->orWhere('type','like',$str.'%')
+                ->orWhere('p_method','like',$str.'%')
+                ->orWhere('p_trxid','like',$str.'%')
+                ->orWhere('plan_name','like',$str.'%');
             });
         }
         $record = $record->orderBy('id','desc');
-        
-        $data = array();
-        
-        $data['total']= $record->sum('amount');
+
+        $data = array();        
+        $data['total_recharge']= $record->get()->where('type','recharge')->sum('amount');
+        $data['total_transfer']=  $record->get()->where('type','transfer')->sum('amount');
+        $data['total_commission']= $record->get()->where('type','commission')->sum('amount');
         
         $data['data'] = $record->paginate(15);
                 
@@ -86,6 +96,7 @@ class TransactionService
             try{
                 $params['created_by'] = Auth::user()->id;                
                 $this->model->create($params);
+                $this->addCommission($params);
                 return true;
             }
             catch (\Exception $e){
@@ -137,7 +148,7 @@ class TransactionService
         
         $params['seller_id'] = Auth::user()->id;
         $params['created_by'] = $params['seller_id'];
-        
+        $params['plan_name'] = 'Transfer';
         try{
             $this->model->create($params);
             $user = UserService::find($params['user_id']);
@@ -165,6 +176,35 @@ class TransactionService
         $data = array_merge($tmp,$post);
         
         return (object) $data;
+    }
+    
+    public function addCommission($params){
+        try{
+            if($params['type']!='recharge')
+                return false;        
+    
+            $user = UserService::find($params['user_id']);
+            $seller = UserService::find($user->created_by);
+            if($seller->role->name=='reseller'){
+                $data = array(
+                    'user_id' => $seller->id,
+                    'username' => $seller->username,
+                    'plan_name' => "Commission. Ref-".$params['user_id'],
+                    'amount' => $params['discount'],
+                    'status' => 'complete',
+                    'type' => 'commission',
+                    'p_method' => 'cash',
+                    'p_trxid' => '1234',
+                    'seller_id' => $seller->id,
+                    'created_by' =>$params['created_by']
+                );
+                $this->model->create($data);
+            }
+            $seller->update(['balance'=>$seller->balance + $params['discount']]);
+        }
+        catch(\Exception $e){
+            throw new Exception($e->getMessage());
+        }
     }
 
 

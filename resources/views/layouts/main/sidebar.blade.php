@@ -60,17 +60,10 @@
         </div>
       </li>
       <li class="nav-item {{ checkIfActive('admin.transactions') }}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayment" aria-expanded="false" aria-controls="collapseBootstrap">
+        <a class="nav-link collapsed" href="{{ url("admin/transactions/") }}">
          <i class="fas fa-search-dollar"></i>
-          <span>History</span>
+          <span>Transactions</span>
         </a>
-        <div id="collapsePayment" class="collapse {{ checkIfShow('admin.transactions') }}" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar" style="">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">History</h6>
-            <a class="collapse-item {{ checkIfActive('admin.transactions.recharges.list') }}" href="{{ url("admin/transactions/recharges") }}">Recharges</a>
-         	<a class="collapse-item {{ checkIfActive('admin.transactions.transfers.list') }}" href="{{ url("admin/transactions/transfers") }}">Transfers</a>
-         </div>
-        </div>
       </li>
       
       <li class="nav-item {{ checkIfActive('admin.sms') }}">
@@ -186,17 +179,10 @@
       </li>
       
       <li class="nav-item {{ checkIfActive('admin.transactions') }}">
-        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePayment" aria-expanded="false" aria-controls="collapseBootstrap">
+        <a class="nav-link collapsed" href="{{ url("admin/transactions/") }}">
          <i class="fas fa-search-dollar"></i>
-          <span>History</span>
+          <span>Transactions</span>
         </a>
-        <div id="collapsePayment" class="collapse {{ checkIfShow('admin.transactions') }}" aria-labelledby="headingBootstrap" data-parent="#accordionSidebar" style="">
-          <div class="bg-white py-2 collapse-inner rounded">
-            <h6 class="collapse-header">History</h6>
-            <a class="collapse-item {{ checkIfActive('admin.transactions.recharges.list') }}" href="{{ url("admin/transactions/recharges") }}">Recharges</a>
-         	<a class="collapse-item {{ checkIfActive('admin.transactions.transfers.list') }}" href="{{ url("admin/transactions/transfers") }}">Transfers</a>
-         </div>
-        </div>
       </li>
       
       <li class="nav-item {{ checkIfActive('admin.plans') }}">
