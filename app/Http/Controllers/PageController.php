@@ -32,7 +32,6 @@ class PageController extends Controller
             $cus_role = $rs->search(['name'=>'customer'])->first()->id;
             $res_role = $rs->search(['name'=>'reseller'])->first()->id;
             $ad_role = $rs->search(['name'=>'admin'])->first()->id;            
-            
             $data['total_admin'] = $us->search(['role_id'=>$ad_role])->count();
             $data['total_customer'] = $us->search(['role_id'=>$cus_role])->count();
             $data['total_reseller'] = $us->search(['role_id'=>$res_role])->count();

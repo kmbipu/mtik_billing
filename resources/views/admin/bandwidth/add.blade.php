@@ -19,7 +19,7 @@
                       <div class="row">
                         <div class="col-8">
                           <label>Download Rate</label>
-                          <input value="{{request('rate_down')}}" name="rate_down" type="number" class="form-control" placeholder="Enter down rate" required>
+                          <input value="{{request('rate_down')}}" name="rate_down" type="text" class="form-control" placeholder="Enter down rate" required>
                         </div>
                         <div class="col-4">
                         <label>Unit</label>
@@ -35,7 +35,7 @@
                       <div class="row">
                         <div class="col-8">
                           <label>Up Rate</label>
-                          <input value="{{request('rate_up')}}" name="rate_up" type="number" class="form-control" placeholder="Enter down rate" required>
+                          <input value="{{request('rate_up')}}" name="rate_up" type="text" class="form-control" placeholder="Enter down rate" required>
                         </div>
                         <div class="col-4">
                         <label>Unit</label>

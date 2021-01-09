@@ -330,7 +330,7 @@ class PrepaidService
         }
         
         $sms = json_decode($setting);
-        if(empty($phone) || empty($sms->recharge_message) || empty($sms->recharge_message)){
+        if(empty($phone) || empty($sms->recharge_message)){
             return false;
         }        
         $ss = new SmsService();

@@ -15,6 +15,7 @@ class Plan extends Model
         'pool_id',
         'bandwidth_id',
         'price',
+        'discount',
         'validity',
         'validity_unit',
         'seller_id',

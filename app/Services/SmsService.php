@@ -59,6 +59,18 @@ class SmsService
             return false;
         }
         try{
+            
+            $setting = SettingService::find('sms');
+            if($setting==null){
+                Session::flash('error','SMS Settings is Inactive.');
+                return false;
+            }
+            $sms = json_decode($setting);
+            if(!isset($sms->status) || empty($sms->status) || $sms->status==0){
+                Session::flash('error','SMS Settings is Inactive.');
+                return false;
+            }
+            
             $gs = new GatewayService();
             $result = $gs->sendSMS($phone, $message);
             if($result)
@@ -81,6 +93,19 @@ class SmsService
             return false;
         }        
         try{
+            
+            $setting = SettingService::find('sms');
+            if($setting==null){
+                Session::flash('error','SMS Settings is Inactive.');
+                return false;
+            }            
+            $sms = json_decode($setting);
+            if(!isset($sms->status) || empty($sms->status) || $sms->status==0){
+                Session::flash('error','SMS Settings is Inactive.');
+                return false;
+            }
+            
+            
             $gs = new GatewayService();
             $result = $gs->sendSMS($phone, $message);
             if($result){

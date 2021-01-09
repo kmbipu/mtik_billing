@@ -53,8 +53,12 @@ class PrepaidController extends Controller
                 return back();
             }
         }
-        
-        $users = UserService::getCustomers(true);        
+        if(Helper::isAdmin()){
+            $users = UserService::getCustomers();
+        }
+        else{
+            $users = UserService::getCustomers(true);
+        }
         $routers = RouterService::getAll();
         return view('admin.prepaid.recharge',['users'=>$users,'routers'=>$routers]);
     }

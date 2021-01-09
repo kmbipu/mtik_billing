@@ -33,7 +33,14 @@
 						@foreach($data as $d)
 						<tr>
 							<td>{{ $d->id }}</td>
-							<td>{{ strlen($d->phone)>11?substr($d->phone,0,10).'...':$d->phone }}</td>
+							@php
+							$sms = explode(',',$d->phone);
+							if(count($sms)>1)
+								$phone = count($sms).' numbers';
+							else
+							    $phone = $d->phone;
+							@endphp
+							<td>{{ $phone }}</td>
 							<td>{{ $d->message }}</td>
 							<td>
 							@if($d->status)

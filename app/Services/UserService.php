@@ -31,12 +31,10 @@ class UserService
     
     public static function getCustomers($own=false){
         $role = Role::where('name','customer')->first();
-        $role_id = -1;
-        if($role){$role_id= $role->id;}
         if($own)
-            return User::where(['created_by'=>Auth::user()->id,'role_id'=>$role_id])->get();
+            return User::where(['created_by'=>Auth::user()->id,'role_id'=>$role->id])->get();
         else 
-            return User::where(['role_id'=>$role_id])->get();
+            return User::where(['role_id'=>$role->id])->get();
     }
 
     public function search($params=[], $str="", $is_paginate = false, $rows = 15){

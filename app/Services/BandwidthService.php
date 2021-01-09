@@ -100,9 +100,9 @@ class BandwidthService
     protected function validator(array $data){
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:100'],
-            'rate_down' => ['required', 'integer'],
+            'rate_down' => ['required'],
             'rate_down_unit' => ['required', 'string', 'max:5'],
-            'rate_up' => ['required', 'integer'],
+            'rate_up' => ['required'],
             'rate_up_unit' => ['required', 'string', 'max:5'],
         ]);
     }

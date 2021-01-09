@@ -37,4 +37,5 @@
             <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
         @endif
     </ul>
+        <p>Total - {{$paginator->total() }} records</p>
 @endif

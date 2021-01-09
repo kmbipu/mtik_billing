@@ -16,7 +16,7 @@ class CreateSmsTable extends Migration
         Schema::create('sms', function (Blueprint $table) {
             $table->id();
             $table->longText('phone');
-            $table->string('message',255);
+            $table->longText('message');
             $table->integer('status');
             $table->string('reason',255)->nullable();
             $table->timestamps();

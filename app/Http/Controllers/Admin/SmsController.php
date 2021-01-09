@@ -49,11 +49,13 @@ class SmsController extends Controller
           'before_expire_message'=>'',
           'recharge_message'=>'',
           'suspend_message'=>'',
-          'status'=>''
+          'status'=>'0',
+          
         );
         $sms = SettingService::find('sms');
-        if($sms)
-            $data = json_decode($sms,true);
+        if($sms){
+            $data = array_merge($data,json_decode($sms,true));
+        }
 
         return view('admin.sms.setting',$data);
     }
