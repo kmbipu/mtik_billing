@@ -29,8 +29,10 @@
                             <tbody>
                             	<tr><td>Name</td><td>{{$data->name}}</td><tr>
                             	<tr><td>Username</td><td>{{$data->username}}</td><tr>
-                            	<tr><td>Plan</td><td>{{$data->plan_name}}</td><tr>
-                            	<tr><td>Price</td><td>{{$data->price}}</td><tr>
+                            	<tr><td>Plan</td><td>{{$data->plan_name}} = {{$data->price}}</td><tr>
+                            
+                            	<tr><td>Amount</td><td>{{$data->amount}}</td><tr>
+                            	<tr><td>Commission</td><td>{{$data->commission}}</td><tr>
                             	<tr><td>Start Date</td><td>{{$data->start_dt}}</td><tr>
                             	<tr><td>Expire Date</td><td>{{$data->expire_dt}}</td><tr>
                             	
@@ -52,7 +54,9 @@
 				
 					<input type="hidden" name="trans[status]" value="complete">
 					<input type="hidden" name="trans[type]" value="recharge">
-				
+				    <input type="hidden" name="trans[amount]" value="{{$data->amount}}">
+				    <input type="hidden" name="trans[commission]" value="{{$data->commission}}">
+				    
 					<div class="form-group">
                         <label for="exampleFormControlSelect1">Payment Method</label>
                         <select class="form-control select2-single"  name="trans[method]" required>

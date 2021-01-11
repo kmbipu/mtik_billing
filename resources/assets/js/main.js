@@ -66,7 +66,7 @@
 				 
 				 var html = "<option value=''>Select Plan</option>";
 		         for(var i=0;i<data.length;i++){
-					html += "<option value='"+data[i].id+"'>"+data[i].name+"</option>";
+					html += "<option value='"+data[i].id+"'>"+data[i].name+" = "+data[i].price+"</option>";
 				 }
 				 e.html(html);
 		      },

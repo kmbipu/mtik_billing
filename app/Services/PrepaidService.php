@@ -214,8 +214,6 @@ class PrepaidService
             $plan = PlanService::find($params['prepaid']['plan_id']);
             $user = UserService::find($user_id);
             
-            
-            
             if($u = Helper::isReseller()){
                 if($u->balance < $plan->price){
                     Session::flash('error', 'Insufficient balance.');
@@ -240,7 +238,7 @@ class PrepaidService
                 'user_id' => $params['prepaid']['user_id'],
                 'username' => $user->username,
                 'plan_name' => $plan->name,
-                'amount' => $plan->price,
+                'amount' => $params['trans']['amount'],
                 'start_dt' => $params['prepaid']['start_dt'],
                 'expire_dt' => $params['prepaid']['expire_dt'],
                 'status' => $params['trans']['status'],
@@ -248,13 +246,13 @@ class PrepaidService
                 'p_method' => $params['trans']['method'],
                 'p_trxid' => $params['trans']['trxid'],
                 'seller_id' => $plan->seller_id,
-                'discount' =>$plan->discount
+                'discount' => $params['trans']['commission']
             );
             $ts = new TransactionService();
             $ts->insert($trans,true);
             
             DB::commit();
-            $this->sendRechargeSMS($user->id, $user->phone, $plan->price);
+            $this->sendRechargeSMS($user->id, $user->phone, $params['trans']['amount']);
             Session::flash('success', 'Successfully recharged.');
             return true;
             
@@ -266,13 +264,26 @@ class PrepaidService
         }
     }
 
-    public function prepareRechargeReview($user_id, $plan_id)
+    public function prepareRechargeReview($user_id, $plan_id, $amount)
     {        
         $user = UserService::find($user_id);
-        $plan = PlanService::find($plan_id); 
+        $plan = PlanService::find($plan_id);
+        
+        $validity = $plan->validity;
+        if($plan->validity_unit=='month'){
+            $validity = $plan->validity * 30;
+        }
+        
+        $validity = ceil(($validity * $amount)/$plan->price)-1;
+        if($validity<=0){
+            Session::flash('error', 'Invalid recharge amount.');
+            return false;
+        }
+            
+        $com = ceil(($plan->discount * $amount)/$plan->price);
               
         $start_dt = date("Y-m-d");
-        $expire_dt = date("Y-m-d", strtotime($start_dt . " + $plan->validity $plan->validity_unit"));
+        $expire_dt = date("Y-m-d", strtotime($start_dt . " + $validity days"));
     
         $data = array(
             'name' => $user->name,
@@ -281,10 +292,12 @@ class PrepaidService
             'router_id' => $plan->router_id,
             'plan_id' => $plan_id,
             'plan_name' => $plan->name,
-            'seller_id' => $plan->seller_id,
             'price' => $plan->price,
+            'seller_id' => $plan->seller_id,
+            'amount' => intval($amount),
             'start_dt' => $start_dt,
-            'expire_dt' => $expire_dt
+            'expire_dt' => $expire_dt,
+            'commission' => $com 
         );
 
         return (object) $data;
@@ -330,7 +343,7 @@ class PrepaidService
         }
         
         $sms = json_decode($setting);
-        if(empty($phone) || empty($sms->recharge_message)){
+        if(empty($phone) || empty($sms->recharge_message) || empty($sms->recharge_message)){
             return false;
         }        
         $ss = new SmsService();

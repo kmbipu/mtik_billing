@@ -42,7 +42,14 @@
 						<select id="load-plans-by-router" class="form-control" name="plan_id" required>
 							<option value="">Select Plan</option>
 						</select>
-					</div>				
+					</div>
+					
+					
+					<div class="form-group">
+						<label>Amount</label> 
+						<input name="amount" type="number"
+							class="form-control" placeholder="Enter amount" required>
+					</div>
 
 					<br>
 					<div class="form-group text-center">
