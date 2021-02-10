@@ -9,7 +9,7 @@ require_once 'PEAR2/Autoload.php';
 class Pear2Service
 {
     private $client;
-    private $debug = true;
+    private $debug = false;
 
     public function __construct($router_id)
     {
@@ -19,7 +19,7 @@ class Pear2Service
 
     private function connect($router){
         if($this->debug){return false;}
-        
+
         try {
             $this->client = new RouterOS\Client($router->ip, $router->username, $router->password);
         } catch (Exception $e) {
@@ -44,17 +44,17 @@ class Pear2Service
     public function editPool($name, $ip_range){
         if($this->debug){return false;}
         try{
-            
+
             $client = $this->client;
-            
+
             $printRequest = new RouterOS\Request(
                 '/ip pool print .proplist=name',
                 RouterOS\Query::where('name', $name)
             );
             $poolName = $this->client->sendSync($printRequest)->getProperty('name');
-            
+
             $setRequest = new RouterOS\Request('/ip/pool/set');
-            
+
             $client($setRequest
                 ->setArgument('numbers', $poolName)
                 ->setArgument('ranges', $ip_range)
@@ -69,15 +69,15 @@ class Pear2Service
         if($this->debug){return false;}
         try{
             $client = $this->client;
-            
+
             $printRequest = new RouterOS\Request(
                 '/ip pool print .proplist=name',
                 RouterOS\Query::where('name', $name)
             );
             $poolName = $this->client->sendSync($printRequest)->getProperty('name');
-            
+
             $removeRequest = new RouterOS\Request('/ip/pool/remove');
-            
+
             $client($removeRequest
                 ->setArgument('numbers', $poolName)
             );
@@ -86,7 +86,7 @@ class Pear2Service
             throw new Exception('Unable to update pool.');
         }
     }
-    
+
     public function addPPPoeUser($user,$pass,$plan) {
         if($this->debug){return false;}
         try{
@@ -103,7 +103,7 @@ class Pear2Service
             throw new Exception('Unable to add pppoe user in server.');
         }
     }
-    
+
     public function deletePPPoeUser($user) {
         if($this->debug){return false;}
         try{
@@ -114,15 +114,15 @@ class Pear2Service
                 );
             $userName = $this->client->sendSync($printRequest)->getProperty('name');
             $removeRequest = new RouterOS\Request('/ppp/secret/remove');
-            
+
             $client($removeRequest->setArgument('numbers', $userName));
         }
         catch (Exception $e) {
             throw new Exception('Unable to delete pppoe user in server.');
         }
     }
-    
-    public function addProfile($plan_name, $pool_name, $rate) {        
+
+    public function addProfile($plan_name, $pool_name, $rate) {
         if($this->debug){return false;}
         try{
             $addRequest = new RouterOS\Request('/ppp/profile/add');
@@ -137,22 +137,22 @@ class Pear2Service
             throw new Exception('Unable to add profile in server.');
         }
     }
-    
-    public function editProfile($plan_name, $pool_name, $rate) {        
+
+    public function editProfile($plan_name, $pool_name, $rate) {
         if($this->debug){return false;}
         try{
-            
+
             $client = $this->client;
-            
+
             $printRequest = new RouterOS\Request(
                 '/ppp profile print .proplist=name',
                 RouterOS\Query::where('name', $plan_name)
                 );
             $profileName = $client->sendSync($printRequest)->getProperty('name');
-            
+
             $setRequest = new RouterOS\Request('/ppp/profile/set');
-            
-            
+
+
             $client($setRequest
                 ->setArgument('numbers', $profileName)
                 ->setArgument('local-address', $pool_name)
@@ -165,19 +165,19 @@ class Pear2Service
             throw new Exception('Unable to edit profile in server.');
         }
     }
-    
+
     public function deleteProfile($name) {
         if($this->debug){return false;}
-        
+
         try{
-            
+
             $client = $this->client;
             $printRequest = new RouterOS\Request(
                 '/ppp profile print .proplist=name',
                 RouterOS\Query::where('name', $name)
                 );
             $profileName = $client->sendSync($printRequest)->getProperty('name');
-            
+
             $removeRequest = new RouterOS\Request('/ppp/profile/remove');
             $client($removeRequest
                 ->setArgument('numbers', $profileName)
@@ -188,7 +188,7 @@ class Pear2Service
             throw new Exception('Unable to delete pppoe user in server.');
         }
     }
-    
+
     public function enablePPPoeUser($username){
         if($this->debug){return false;}
         try{
@@ -197,7 +197,7 @@ class Pear2Service
             $printRequest->setArgument('.proplist', '.id');
             $printRequest->setQuery(RouterOS\Query::where('name', $username));
             $id = $client->sendSync($printRequest)->getProperty('.id');
-            
+
             $setRequest = new RouterOS\Request('/ppp/secret/enable');
             $setRequest->setArgument('numbers', $id);
             $client->sendSync($setRequest);
@@ -207,7 +207,7 @@ class Pear2Service
             throw new Exception('Unable to enable pppoe user in server.');
         }
     }
-    
+
     public function disablePPPoeUser($username){
         if($this->debug){return false;}
         try{
@@ -216,7 +216,7 @@ class Pear2Service
             $printRequest->setArgument('.proplist', '.id');
             $printRequest->setQuery(RouterOS\Query::where('name', $username));
             $id = $client->sendSync($printRequest)->getProperty('.id');
-            
+
             $setRequest = new RouterOS\Request('/ppp/secret/disable');
             $setRequest->setArgument('numbers', $id);
             $client->sendSync($setRequest);
@@ -227,6 +227,12 @@ class Pear2Service
         }
     }
 
-
+    public function getPPPoeUserSpeed($username=false){
+        if($this->debug){return false;}
+        $client = $this->client;
+        $printRequest = new RouterOS\Request('/ppp/interface/getall');
+        $b = $client->sendSync($printRequest);
+        dd($b);
+    }
 
 }

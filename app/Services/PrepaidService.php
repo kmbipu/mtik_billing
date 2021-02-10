@@ -53,10 +53,10 @@ class PrepaidService
         $validator = $this->validator($params);
         if ($validator->passes()) {
             try {
-                $this->model->create($params); 
+                $this->model->create($params);
                 $p2s = new Pear2Service($params['router_id']);
                 $p2s->addPPPoeUser($params['username'], $params['password'], $params['plan_name']);
-                
+
                 return true;
             } catch (\Exception $e) {
                 Helper::log($e->getMessage());
@@ -68,15 +68,15 @@ class PrepaidService
                     return false;
                 }
             }
-        } else {            
+        } else {
             $error = Helper::errorToString($validator->errors()->all());
             if($call){
                 throw new Exception($error);
-            }                
+            }
             else{
                 Session::flash('error', $error);
                 return false;
-            }            
+            }
         }
     }
 
@@ -90,9 +90,9 @@ class PrepaidService
             $p2s = new Pear2Service($prepaid->router_id);
             if($params['status'])
                 $p2s->enablePPPoeUser($username);
-            else 
+            else
                 $p2s->disablePPPoeUser($username);
-            
+
             DB::commit();
             Session::flash('success', 'Successfully updated.');
             return true;
@@ -102,9 +102,9 @@ class PrepaidService
             Session::flash('error', 'Unable to update.');
             return false;
         }
-        
+
     }
-    
+
     public function update($condition, $params, $call=false)
     {
         try {
@@ -113,7 +113,7 @@ class PrepaidService
             $p2s = new Pear2Service($params['router_id']);
             $p2s->deletePPPoeUser($params['username']);
             $p2s->addPPPoeUser($params['username'], $params['password'], $params['plan_name']);
-            
+
             return true;
         } catch (\Exception $e) {
             Helper::log($e->getMessage());
@@ -124,9 +124,9 @@ class PrepaidService
             else{
                 Session::flash('error', $error);
                 return false;
-            } 
+            }
         }
-        
+
     }
 
     public function delete($id)
@@ -138,7 +138,7 @@ class PrepaidService
             $record->delete();
             $p2s = new Pear2Service($router_id);
             $p2s->deletePPPoeUser($username);
-            
+
             Session::flash('success', 'Successfully deleted.');
             return true;
         } catch (Exception $e) {
@@ -149,17 +149,17 @@ class PrepaidService
     }
 
     public function renew($condition, $params)
-    {        
+    {
         try {
             DB::beginTransaction();
-            
+
             $user_id = $params['prepaid']['user_id'];
             $prepaid = $this->model->where(['user_id'=>$user_id])->first();
             $plan = PlanService::find($params['prepaid']['plan_id']);
             $user = UserService::find($user_id);
-            
+
             if($u = Helper::isReseller()){
-                if($u->balance < $plan->price){
+                if($u->balance < intval($params['trans']['amount'])){
                     Session::flash('error', 'Insufficient balance.');
                     return false;
                 }
@@ -167,14 +167,14 @@ class PrepaidService
                     $u->update(['balance'=>$u->balance - $plan->price]);
                 }
             }
-            
+
             $params['prepaid']['username'] = $user->username;
             $params['prepaid']['password'] = $user->secret;
             $params['prepaid']['plan_name'] = $plan->name;
-            
-            
+
+
             $this->update($condition, $params['prepaid'], true);
-            
+
             $trans = array(
                 'user_id' => $params['prepaid']['user_id'],
                 'username' => $user->username,
@@ -192,6 +192,9 @@ class PrepaidService
 
             $ts = new TransactionService();
             $ts->insert($trans, true);
+            $p2s = new Pear2Service($plan->router_id);
+            $p2s->enablePPPoeUser($user->username);
+
             DB::commit();
             $this->sendRechargeSMS($user->id, $user->phone, $plan->price);
             Session::flash('success', 'Successfully renewed.');
@@ -202,7 +205,7 @@ class PrepaidService
             Session::flash('error', 'Unable to renew now.');
             return false;
         }
-    
+
     }
 
     public function recharge($params)
@@ -213,9 +216,9 @@ class PrepaidService
             $prepaid = $this->model->where(['user_id'=>$user_id])->first();
             $plan = PlanService::find($params['prepaid']['plan_id']);
             $user = UserService::find($user_id);
-            
+
             if($u = Helper::isReseller()){
-                if($u->balance < $plan->price){
+                if($u->balance < intval($params['trans']['amount'])){
                     Session::flash('error', 'Insufficient balance.');
                     return false;
                 }
@@ -223,17 +226,17 @@ class PrepaidService
                     $u->update(['balance'=>$u->balance - $plan->price]);
                 }
             }
-            
+
             $params['prepaid']['username'] = $user->username;
             $params['prepaid']['password'] = $user->secret;
             $params['prepaid']['plan_name'] = $plan->name;
-            
+
             if ($prepaid)
                 $this->update(['id' => $prepaid->id], $params['prepaid'], true);
             else
                 $this->insert($params['prepaid'],true);
 
-            
+
             $trans = array(
                 'user_id' => $params['prepaid']['user_id'],
                 'username' => $user->username,
@@ -250,12 +253,15 @@ class PrepaidService
             );
             $ts = new TransactionService();
             $ts->insert($trans,true);
-            
+
+            $p2s = new Pear2Service($plan->router_id);
+            $p2s->enablePPPoeUser($user->username);
+
             DB::commit();
             $this->sendRechargeSMS($user->id, $user->phone, $params['trans']['amount']);
             Session::flash('success', 'Successfully recharged.');
             return true;
-            
+
         } catch (Exception $e) {
             DB::rollBack();
             Helper::log($e->getMessage());
@@ -265,26 +271,26 @@ class PrepaidService
     }
 
     public function prepareRechargeReview($user_id, $plan_id, $amount)
-    {        
+    {
         $user = UserService::find($user_id);
         $plan = PlanService::find($plan_id);
-        
+
         $validity = $plan->validity;
         if($plan->validity_unit=='month'){
             $validity = $plan->validity * 30;
         }
-        
+
         $validity = ceil(($validity * $amount)/$plan->price)-1;
         if($validity<=0){
             Session::flash('error', 'Invalid recharge amount.');
             return false;
         }
-            
+
         $com = ceil(($plan->discount * $amount)/$plan->price);
-              
+
         $start_dt = date("Y-m-d");
         $expire_dt = date("Y-m-d", strtotime($start_dt . " + $validity days"));
-    
+
         $data = array(
             'name' => $user->name,
             'user_id' => $user->id,
@@ -297,17 +303,17 @@ class PrepaidService
             'amount' => intval($amount),
             'start_dt' => $start_dt,
             'expire_dt' => $expire_dt,
-            'commission' => $com 
+            'commission' => $com
         );
 
         return (object) $data;
     }
 
     public function prepareRenewReview($prepaid_id)
-    {        
+    {
         $prepaid = $this->find($prepaid_id);
         $user = $prepaid->user;
-        
+
         $plan = PlanService::find($prepaid->plan_id);
         $cd = date("Y-m-d");
         if($prepaid->expire_dt<$cd){
@@ -333,24 +339,24 @@ class PrepaidService
 
         return (object) $data;
     }
-    
-    
+
+
     private function sendRechargeSMS($user_id, $phone, $amount){
         try{
         $setting = SettingService::find('sms');
         if($setting==null){
             return false;
         }
-        
+
         $sms = json_decode($setting);
         if(empty($phone) || empty($sms->recharge_message) || empty($sms->recharge_message)){
             return false;
-        }        
+        }
         $ss = new SmsService();
         $message = $sms->recharge_message;
         $message = str_replace('<id>', $user_id, $message);
         $message = str_replace('<amount>', $amount, $message);
-        
+
         $ss->sendMessage($phone, $message);
         }
         catch (Exception $e){

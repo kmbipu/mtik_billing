@@ -3,65 +3,98 @@
 
 @section('content')
 
-<div class="row">
-	<div class="col-md-6 mb-4">
-		<!-- Simple Tables -->
-		<div class="card">
-			<div class="card-header">Single SMS</div>
-			<div class="card-body">
-				<form method="post">
-					@csrf
-					<input type="hidden" name="single_group" value="single">
-					<div class="form-group">
-						<label for="input_role_name">Phone</label> 
-						<input name="phone"	type="tel" class="form-control" placeholder="Enter phone number" required>
-					</div>
-					
-					<div class="form-group">
-						<label for="input_role_name">Message</label> 
-						<textarea name="message" class="form-control" placeholder="Enter message here" required></textarea>
-					</div>
-					<br>
-					<button type="submit" class="btn btn-primary">Send</button>
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <!-- Simple Tables -->
+            <div class="card">
+                <div class="card-header">Single SMS</div>
+                <div class="card-body">
+                    <form method="post">
+                        @csrf
+                        <input type="hidden" name="single_group" value="single">
+                        <div class="form-group">
+                            <label for="input_role_name">Phone</label>
+                            <input name="phone"	type="tel" class="form-control" placeholder="Enter phone number" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Saved Message</label>
+                            <select	class="form-control save_message">
+                                <option value="">Select Message</option>
+                                @if(isset($data))
+                                    @foreach($data as $k=>$v)
+                                        <option value="{{$v}}">{{$k}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input_role_name">Message</label>
+                            <textarea name="message" class="form-control" placeholder="Enter message here" required></textarea>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Send</button>
 
 
-				</form>
-			</div>
+                    </form>
+                </div>
 
-		</div>
-	</div>
-	
-	<div class="col-md-6 mb-4">
-		<!-- Simple Tables -->
-		<div class="card">
-			<div class="card-header">Group SMS</div>
-			<div class="card-body">
-				<form method="post">
-					@csrf
-					<input type="hidden" name="single_group" value="group">
-					<div class="form-group">
-                        <label for="exampleFormControlSelect1">Group</label>
-                        <select class="form-control"  name="group" required>
-                            <option value="">Select Group</option>
-                            <option value="1">My Customers</option>
-                            <option value="2">All Customers</option>
-                            <option value="3">Resellers</option>
-                        </select>
-                    </div>
-					
-					<div class="form-group">
-						<label for="input_role_name">Message</label> 
-						<textarea name="message" class="form-control" placeholder="Enter message here" required></textarea>
-					</div>
-					<br>
-					<button type="submit" class="btn btn-primary">Send</button>
+            </div>
+        </div>
+
+        <div class="col-md-6 mb-4">
+            <!-- Simple Tables -->
+            <div class="card">
+                <div class="card-header">Group SMS</div>
+                <div class="card-body">
+                    <form method="post">
+                        @csrf
+                        <input type="hidden" name="single_group" value="group">
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Group</label>
+                            <select class="form-control"  name="group" required>
+                                <option value="">Select Group</option>
+                                <option value="1">My Customers</option>
+                                <option value="2">All Customers</option>
+                                <option value="3">Resellers</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="exampleFormControlSelect1">Saved Message</label>
+                            <select	class="form-control save_message">
+                                <option value="">Select Message</option>
+                                @if(isset($data))
+                                    @foreach($data as $k=>$v)
+                                        <option value="{{$v}}">{{$k}}</option>
+                                    @endforeach
+                                @endif
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="input_role_name">Message</label>
+                            <textarea name="message" class="form-control" placeholder="Enter message here" required></textarea>
+                        </div>
+                        <br>
+                        <button type="submit" class="btn btn-primary">Send</button>
 
 
-				</form>
-			</div>
+                    </form>
+                </div>
 
-		</div>
-	</div>
-</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(".save_message").change(function (){
+            var v = $(this).val();
+            if(v=='' || v==undefined)
+                return;
+            $(this).parents("form").find("textarea[name='message']").text(v);
+        })
+    </script>
 
 @endsection
